@@ -1,0 +1,25 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+.tanstack/
+.vercel/output/
+
+# Project-specific files
+.project_id
+.github_repo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local Grok workspace logs
+.grok/preview.log
+.grok/status
+.grok/
+attachments/
+screenshots/
+.vercel/
+.tanstack/tmp/
+.node_modules.lock

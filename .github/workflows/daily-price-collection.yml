@@ -1,0 +1,39 @@
+name: Daily price collection
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-price-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: >-
+      ${{
+        github.event_name == 'schedule' ||
+        (
+          github.event.repository.default_branch &&
+          github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        )
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --omit=dev --no-audit --no-fund
+      - name: Run offline collector tests
+        run: node --test scripts/price-collector.test.mjs
+      - name: Collect permitted public product data
+        run: node scripts/price-collector.mjs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
