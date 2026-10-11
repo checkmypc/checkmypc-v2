@@ -12,7 +12,9 @@ export const Route = createFileRoute("/deals")({ component: DealsPage });
 
 function DealsPage() {
   const { t } = useI18n();
-  const sourceProducts = useOps((s) => (s.hydrated ? s.products : allProducts()));
+  const hydrated = useOps((s) => s.hydrated);
+  const storedProducts = useOps((s) => s.products);
+  const sourceProducts = hydrated ? storedProducts : allProducts();
   const { products, loading: photosLoading, error: photosError } = useProductsWithPhotos(sourceProducts);
   const deals = [...products]
     .map((p) => ({ ...p, save: p.msrp - p.best_price }))

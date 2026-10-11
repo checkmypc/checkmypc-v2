@@ -34,7 +34,9 @@ const FEATURED_SYSTEM_IMAGES: Record<string, string> = {
 
 function Home() {
   const { t } = useI18n();
-  const sourceProducts = useOps((s) => (s.hydrated ? s.products : allProducts()));
+  const hydrated = useOps((s) => s.hydrated);
+  const storedProducts = useOps((s) => s.products);
+  const sourceProducts = hydrated ? storedProducts : allProducts();
   const { products } = useProductsWithPhotos(sourceProducts);
   useOps((s) => s.recipes);
   useOps((s) => s.packagePrices);
