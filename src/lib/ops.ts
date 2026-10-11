@@ -24,7 +24,7 @@ import {
   setPackagePriceFn,
   touchPricesFn,
 } from "./api";
-import { catalog, recomputeProduct, bindLiveProducts } from "./catalog";
+import { catalog, includeManifestComponents, recomputeProduct, bindLiveProducts } from "./catalog";
 import { bindLiveRecipes, type PrebuiltRecipe } from "./prebuilts";
 import { ALL_PACKAGES, CONTACT, bindLivePrices } from "./services";
 import { bindLiveUsed, type InspectionReport, type UsedListing } from "./used";
@@ -37,7 +37,6 @@ import type {
   OpsSettings,
   Product,
   ServiceKind,
-  Stock,
   Technician,
 } from "./types";
 import { SEED_TEAM, seedListings } from "./ops-seed";
@@ -123,7 +122,7 @@ export type OpsState = OpsSnapshot & {
   upsertBooking: (b: Booking) => void;
   patchBooking: (id: string, patch: Partial<Booking>) => void;
   deleteBooking: (id: string) => void;
-  upsertProduct: (p: Product) => void;
+  upsertProduct: (p: Product) => Promise<void>;
   patchProduct: (id: string, patch: Partial<Product>) => void;
   setOffers: (id: string, offers: Offer[]) => void;
   deleteProduct: (id: string) => void;
@@ -162,7 +161,7 @@ export const useOps = create<OpsState>((set, get) => {
 
   const refreshAdmin = async () => {
     const snap = await getAdminSnapshot();
-    set({ ...snap, hydrated: true, unlocked: true });
+    set({ ...snap, products: includeManifestComponents(snap.products), hydrated: true, unlocked: true });
   };
 
   return {
@@ -180,12 +179,18 @@ export const useOps = create<OpsState>((set, get) => {
           if (session.ok) {
             const admin = await getAdminSnapshot();
             if (gen !== hydrateGen) return;
-            set({ ...admin, hydrated: true, unlocked: true, adminEmail: session.email });
+            set({
+              ...admin,
+              products: includeManifestComponents(admin.products),
+              hydrated: true,
+              unlocked: true,
+              adminEmail: session.email,
+            });
             return;
           }
           set({
             ...seedSnapshot(),
-            products: pub.products.length ? pub.products : seedSnapshot().products,
+            products: includeManifestComponents(pub.products.length ? pub.products : seedSnapshot().products),
             listings: pub.listings.length ? pub.listings : seedSnapshot().listings,
             reports: pub.reports,
             recipes: pub.recipes.length ? pub.recipes : seedSnapshot().recipes,
@@ -248,13 +253,13 @@ export const useOps = create<OpsState>((set, get) => {
       );
       void deleteBookingFn({ data: { id } }).catch((err) => toast.error(errMessage(err)));
     },
-    upsertProduct: (p) => {
+    upsertProduct: async (p) => {
       const next = recomputeProduct(p);
+      const saved = await saveProductFn({ data: next });
       const list = get().products;
-      const i = list.findIndex((x) => x.id === next.id);
-      const products = i >= 0 ? list.map((x, idx) => (idx === i ? next : x)) : [next, ...list];
-      apply({ products }, `Catalogue — ${next.name}`);
-      void saveProductFn({ data: next }).catch((err) => toast.error(errMessage(err)));
+      const i = list.findIndex((x) => x.id === saved.id);
+      const products = i >= 0 ? list.map((x, idx) => (idx === i ? saved : x)) : [saved, ...list];
+      apply({ products }, `Catalogue — ${saved.name}`);
     },
     patchProduct: (id, patch) => {
       const products = get().products.map((p) => (p.id === id ? recomputeProduct({ ...p, ...patch }) : p));
@@ -415,20 +420,11 @@ export function emptyProduct(category: CategorySlug): Product {
     msrp: 0,
     best_price: 0,
     used_price: 0,
-    in_stock: true,
-    store_count: 1,
+    in_stock: false,
+    store_count: 0,
     power_draw: 0,
     specs: {},
-    offers: [
-      {
-        store: catalog.stores[0]?.name ?? "Shop",
-        city: catalog.stores[0]?.city ?? "Casablanca",
-        price: 0,
-        stock: "in_stock" as Stock,
-        checked_minutes_ago: 0,
-        url: "https://",
-      },
-    ],
+    offers: [],
     history: [],
   };
 }
@@ -486,7 +482,7 @@ export function emptyOffer(): Offer {
     store: catalog.stores[0]?.name ?? "Shop",
     city: catalog.stores[0]?.city ?? "Casablanca",
     price: 0,
-    stock: "in_stock",
+    stock: "unknown",
     checked_minutes_ago: 0,
     url: "https://",
   };

@@ -1,5 +1,6 @@
 import raw from "@/data/catalog.json";
 import { MANIFEST_COMPONENTS } from "@/data/manifest-components";
+import { useEffect, useState } from "react";
 import type { CatalogFile, CategorySlug, Product, ProductImageManifest } from "./types";
 
 export const catalog = raw as unknown as CatalogFile;
@@ -85,12 +86,15 @@ export function recomputeProduct(p: Product): Product {
     ...p,
     best_price: best,
     store_count: p.offers.length,
-    in_stock: inStock.length > 0,
+    in_stock: p.offers.some((o) => o.stock === "in_stock" || o.stock === "low_stock"),
   };
 }
 
 function productPhotoPath(path: string): string | undefined {
   const normalized = path.trim().replace(/^\/+/, "");
+  if (/^api\/media\/media_[a-z0-9]+$/i.test(normalized)) {
+    return `/${normalized}`;
+  }
   if (
     !normalized.startsWith("parts/products/") ||
     !/\.(?:jpe?g|png|webp|gif|avif)$/i.test(normalized) ||
@@ -101,10 +105,53 @@ function productPhotoPath(path: string): string | undefined {
   return `/${normalized}`;
 }
 
+export function hasProductPhoto(product: Product, imageManifest?: ProductImageManifest): boolean {
+  const manifestPhotos = new Set(
+    (imageManifest?.manifest[product.id] ?? [])
+      .map(productPhotoPath)
+      .filter((path): path is string => Boolean(path)),
+  );
+  const savedMedia = productGallery(product, imageManifest).some((path) => path.startsWith("/api/media/"));
+  return manifestPhotos.size > 0 || savedMedia;
+}
+
 export function productGallery(p: Product, imageManifest?: ProductImageManifest): string[] {
   const manifestImages = imageManifest?.manifest[p.id] ?? [];
-  const listedImages = [...manifestImages, ...(p.images ?? []), p.image];
+  const listedImages = [p.image, ...(p.images ?? []), ...manifestImages];
   return [...new Set(listedImages.map(productPhotoPath).filter((path): path is string => Boolean(path)))];
+}
+
+export function useProductsWithPhotos(products: Product[]) {
+  const [manifest, setManifest] = useState<ProductImageManifest>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    let active = true;
+    void loadProductImageManifest()
+      .then((loadedManifest) => {
+        if (!active) return;
+        setManifest(loadedManifest);
+        setLoading(false);
+      })
+      .catch((reason: unknown) => {
+        if (!active) return;
+        const loadError =
+          reason instanceof Error ? reason : new Error("Unable to load product image manifest");
+        console.error("Unable to load product image manifest", loadError);
+        setError(loadError);
+        setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return {
+    products: loading || error ? [] : products.filter((product) => hasProductPhoto(product, manifest)),
+    loading,
+    error,
+  };
 }
 
 let productImageManifestRequest: Promise<ProductImageManifest> | undefined;

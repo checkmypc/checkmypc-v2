@@ -1,4 +1,4 @@
-export type Stock = "in_stock" | "low_stock" | "out_of_stock";
+export type Stock = "in_stock" | "low_stock" | "out_of_stock" | "unknown";
 
 export type CategorySlug =
   | "cpu"

@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Search, Shield, Sparkles, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { catalog, categoryImage, allProducts } from "@/lib/catalog";
+import { ProductImage } from "@/components/product-image";
+import { catalog, categoryImage, allProducts, useProductsWithPhotos } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { useOps } from "@/lib/ops";
 import { prebuilts } from "@/lib/prebuilts";
@@ -33,7 +34,8 @@ const FEATURED_SYSTEM_IMAGES: Record<string, string> = {
 
 function Home() {
   const { t } = useI18n();
-  const products = useOps((s) => (s.hydrated ? s.products : allProducts()));
+  const sourceProducts = useOps((s) => (s.hydrated ? s.products : allProducts()));
+  const { products } = useProductsWithPhotos(sourceProducts);
   useOps((s) => s.recipes);
   useOps((s) => s.packagePrices);
   const featured = prebuilts().filter((p) => p.id in FEATURED_SYSTEM_IMAGES);
@@ -215,9 +217,11 @@ function Home() {
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {hot.map((p) => (
             <Link key={p.id} to="/products/$id" params={{ id: p.id }} className="lift rounded-2xl bg-surface p-3 shadow-[var(--shadow-border)]">
-              <img src={p.image} alt="" className="part-art mx-auto h-16 object-contain" />
+              <div className="product-image-swatch mb-2 grid h-20 place-items-center rounded-lg">
+                <ProductImage product={p} className="part-art mx-auto h-16 object-contain" />
+              </div>
               <p className="mt-2 line-clamp-2 text-sm font-medium">{p.name}</p>
-              <p className="font-display tabular-nums ltr-isolate">{dh(p.best_price)}</p>
+              <p className="product-price font-display tabular-nums ltr-isolate">{dh(p.best_price)}</p>
             </Link>
           ))}
         </div>

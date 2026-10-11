@@ -5,9 +5,10 @@ import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BUILDER_SLOTS, categoryLabel, productsByCategory } from "@/lib/catalog";
+import { allProducts, BUILDER_SLOTS, categoryLabel, useProductsWithPhotos } from "@/lib/catalog";
 import { buildItems, buildTotal, compatibility, decodeBuild, encodeBuild } from "@/lib/builder";
 import { useI18n } from "@/lib/i18n";
+import { useOps } from "@/lib/ops";
 import { useBuild } from "@/lib/store";
 import { dh } from "@/lib/utils";
 import type { CategorySlug } from "@/lib/types";
@@ -26,6 +27,9 @@ function BuilderPage() {
   const remove = useBuild((s) => s.remove);
   const clear = useBuild((s) => s.clear);
   const replace = useBuild((s) => s.replace);
+  const liveProducts = useOps((s) => (s.hydrated ? s.products : undefined));
+  const sourceProducts = liveProducts ?? allProducts();
+  const { products } = useProductsWithPhotos(sourceProducts);
 
   useEffect(() => {
     if (!build) return;
@@ -53,7 +57,7 @@ function BuilderPage() {
         <Card className="rounded-2xl p-2 sm:p-4">
           {BUILDER_SLOTS.map((slot) => {
             const selected = slots[slot]?.id ?? "";
-            const parts = productsByCategory(slot);
+            const parts = products.filter((product) => product.category === slot);
             return (
               <div
                 key={slot}
@@ -144,4 +148,3 @@ function BuilderPage() {
     </main>
   );
 }
-

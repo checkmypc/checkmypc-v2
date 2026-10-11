@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ProductAvailability } from "@/components/product-availability";
 import { ProductImage } from "@/components/product-image";
 import { useI18n } from "@/lib/i18n";
 import { useBuild } from "@/lib/store";
@@ -19,21 +20,17 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="lift group flex min-w-0 flex-col rounded-2xl bg-surface p-3 shadow-[var(--shadow-border)] sm:p-4">
-      <Link
-        to="/products/$id"
-        params={{ id: product.id }}
-        className="product-card-image-frame relative block overflow-hidden rounded-xl border border-border bg-bg"
-        aria-label={`${product.name} details`}
-      >
+      <div className="product-card-image-frame relative block overflow-hidden rounded-xl border border-border bg-bg">
         <span className="absolute start-3 top-3 z-10 rounded-full bg-surface/90 px-2.5 py-1 text-[11px] font-medium text-muted shadow-[var(--shadow-border)] backdrop-blur">
           {categoryLabel(product.category)}
         </span>
         <ProductImage
           product={product}
-          className={`product-card-image product-card-image--${product.category} size-full object-contain p-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] sm:p-5`}
+          controls
+          className={`product-card-image product-card-image--${product.category} size-full object-contain p-4 transition-opacity duration-200 sm:p-5`}
         />
-      </Link>
-      <div className="flex flex-1 flex-col px-1 pt-4">
+      </div>
+      <div className="flex flex-1 flex-col px-1 pt-3 sm:pt-4">
         <p className="text-xs font-medium tracking-wide text-muted">{product.brand}</p>
         <Link
           to="/products/$id"
@@ -43,7 +40,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.name}
         </Link>
         {specs.length > 0 ? (
-          <ul className="mt-3 flex min-h-12 flex-wrap content-start gap-1.5">
+          <ul className="mt-3 hidden min-h-12 flex-wrap content-start gap-1.5 sm:flex">
             {specs.map(([name, value]) => (
               <li
                 key={name}
@@ -54,25 +51,26 @@ export function ProductCard({ product }: { product: Product }) {
             ))}
           </ul>
         ) : (
-          <div className="min-h-12" />
+          <div className="hidden min-h-12 sm:block" />
         )}
-        <div className="mt-auto flex items-end justify-between gap-2 border-t border-border pt-3">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-2 border-t border-border pt-3">
           <div className="min-w-0">
-            <p className="truncate font-display text-lg font-semibold tabular-nums ltr-isolate">
+            <p className="product-price whitespace-nowrap font-display text-base font-bold tabular-nums ltr-isolate sm:text-lg">
               {hasOffers ? dh(product.best_price) : t("ui.priceUnavailable")}
             </p>
             {hasOffers && (
-              <p className="mt-0.5 truncate text-xs text-muted">
+              <p className="mt-0.5 hidden truncate text-xs text-muted sm:block">
                 {product.store_count} {t("ui.stores")}{offer ? ` · ${offer.city}` : ""}
               </p>
             )}
           </div>
-          {hasOffers && <Badge tone="primary">{t("ui.lowest")}</Badge>}
+          {hasOffers && <Badge className="hidden sm:inline-flex" tone="primary">{t("ui.lowest")}</Badge>}
         </div>
+        <ProductAvailability product={product} className="mt-2 w-fit text-[10px] sm:text-xs" />
         <Button
           size="sm"
           variant={inBuild ? "soft" : "default"}
-          className="mt-3 w-full"
+          className="mt-3 hidden w-full sm:inline-flex"
           onClick={() => add(product.id, product.category)}
         >
           {inBuild ? t("ui.inBuild") : t("ui.addBuild")}
@@ -106,12 +104,13 @@ export function ProductRow({ product }: { product: Product }) {
         <p className="mt-0.5 truncate text-xs text-muted ltr-isolate">
           {product.brand} · {spec}
         </p>
-        <p className="mt-1 text-xs text-ok sm:hidden">
+        <p className="product-price mt-1 text-xs font-bold sm:hidden">
           {hasOffers ? `${dh(product.best_price)} · ${product.store_count} ${t("ui.stores")}` : t("ui.priceUnavailable")}
         </p>
+        <ProductAvailability product={product} className="mt-1 w-fit text-[10px] sm:hidden" />
       </div>
       <div className="hidden text-end sm:block">
-        <div className="font-display text-base font-semibold tabular-nums ltr-isolate">
+        <div className="product-price font-display text-base font-bold tabular-nums ltr-isolate">
           {hasOffers ? dh(product.best_price) : t("ui.priceUnavailable")}
         </div>
         <div className="text-xs text-muted">
@@ -122,6 +121,7 @@ export function ProductRow({ product }: { product: Product }) {
             {t("ui.lowest")}
           </Badge>
         )}
+        <ProductAvailability product={product} className="mt-1 hidden w-fit sm:inline-flex" />
       </div>
       <div className="col-span-2 flex gap-2 sm:col-span-1 sm:flex-col">
         <Button
@@ -151,9 +151,10 @@ export function ProductTile({ product }: { product: Product }) {
         />
       </div>
       <h3 className="line-clamp-2 text-sm font-medium transition-colors duration-200 group-hover:text-primary">{product.name}</h3>
-      <p className="mt-auto pt-2 font-display text-base font-semibold tabular-nums ltr-isolate">
+      <p className="product-price mt-auto pt-2 font-display text-base font-bold tabular-nums ltr-isolate">
         {product.offers.length > 0 ? dh(product.best_price) : t("ui.priceUnavailable")}
       </p>
+      <ProductAvailability product={product} className="mt-2 w-fit text-[10px]" />
     </Link>
   );
 }

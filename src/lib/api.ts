@@ -5,7 +5,7 @@ import type { Booking, OpsSettings, Product, Technician } from "./types";
 import type { InspectionReport, UsedListing } from "./used";
 import type { PrebuiltRecipe } from "./prebuilts";
 
-const stockZ = z.enum(["in_stock", "low_stock", "out_of_stock"]);
+const stockZ = z.enum(["in_stock", "low_stock", "out_of_stock", "unknown"]);
 const offerZ = z.object({
   store: z.string().min(1).max(80),
   city: z.string().min(1).max(80),
