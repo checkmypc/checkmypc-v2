@@ -71,10 +71,14 @@ function ComparePage() {
                     <td className="px-4 py-3">{o?.store ?? "—"}</td>
                     <td className="px-4 py-3 text-muted">{o?.city ?? "—"}</td>
                     <td className="px-4 py-3 text-end">
-                      <span className="font-display font-semibold tabular-nums ltr-isolate">{dh(p.best_price)}</span>
-                      <Badge tone="primary" className="ms-2">
-                        {t("ui.lowest")}
-                      </Badge>
+                      <span className="font-display font-semibold tabular-nums ltr-isolate">
+                        {o ? dh(p.best_price) : t("ui.priceUnavailable")}
+                      </span>
+                      {o && (
+                        <Badge tone="primary" className="ms-2">
+                          {t("ui.lowest")}
+                        </Badge>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-end">
                       <Link to="/products/$id" params={{ id: p.id }} className="text-primary">

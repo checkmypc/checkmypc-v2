@@ -1,5 +1,168 @@
 {
   "manifest": {
+    "asrock-b550m-hdv": [
+      "/parts/products/asrock-b550m-hdv/01.jpg",
+      "/parts/products/asrock-b550m-hdv/02.jpg",
+      "/parts/products/asrock-b550m-hdv/03.jpg",
+      "/parts/products/asrock-b550m-hdv/04.jpg"
+    ],
+    "corsair-cv650": [
+      "/parts/products/corsair-cv650/01.jpg",
+      "/parts/products/corsair-cv650/02.jpg",
+      "/parts/products/corsair-cv650/03.jpg",
+      "/parts/products/corsair-cv650/04.jpg"
+    ],
+    "corsair-rm850e": [
+      "/parts/products/corsair-rm850e/01.jpg"
+    ],
+    "corsair-vengeance-32gb-ddr5": [
+      "/parts/products/corsair-vengeance-32gb-ddr5/01.jpg"
+    ],
+    "crucial-bx500-500": [
+      "/parts/products/crucial-bx500-500/01.jpg"
+    ],
+    "dp-ak400-digital": [
+      "/parts/products/dp-ak400-digital/01.jpg",
+      "/parts/products/dp-ak400-digital/02.jpg",
+      "/parts/products/dp-ak400-digital/03.jpg",
+      "/parts/products/dp-ak400-digital/04.jpg"
+    ],
+    "dp-ak400-digital-se": [
+      "/parts/products/dp-ak400-digital-se/01.jpg",
+      "/parts/products/dp-ak400-digital-se/02.jpg",
+      "/parts/products/dp-ak400-digital-se/03.jpg",
+      "/parts/products/dp-ak400-digital-se/04.jpg"
+    ],
+    "dp-ak400-zero-dark": [
+      "/parts/products/dp-ak400-zero-dark/01.jpg",
+      "/parts/products/dp-ak400-zero-dark/02.jpg",
+      "/parts/products/dp-ak400-zero-dark/03.jpg",
+      "/parts/products/dp-ak400-zero-dark/04.jpg"
+    ],
+    "gigabyte-b550m-ds3h": [
+      "/parts/products/gigabyte-b550m-ds3h/01.jpg",
+      "/parts/products/gigabyte-b550m-ds3h/02.jpg",
+      "/parts/products/gigabyte-b550m-ds3h/03.jpg",
+      "/parts/products/gigabyte-b550m-ds3h/04.jpg"
+    ],
+    "gigabyte-b650m-plus-wifi": [
+      "/parts/products/gigabyte-b650m-plus-wifi/01.jpg",
+      "/parts/products/gigabyte-b650m-plus-wifi/02.jpg",
+      "/parts/products/gigabyte-b650m-plus-wifi/03.jpg",
+      "/parts/products/gigabyte-b650m-plus-wifi/04.jpg"
+    ],
+    "gskill-aegis-16gb-ddr4": [
+      "/parts/products/gskill-aegis-16gb-ddr4/01.jpg",
+      "/parts/products/gskill-aegis-16gb-ddr4/02.jpg"
+    ],
+    "gtx-1660-6gb": [
+      "/parts/products/gtx-1660-6gb/01.jpg",
+      "/parts/products/gtx-1660-6gb/02.jpg",
+      "/parts/products/gtx-1660-6gb/03.jpg",
+      "/parts/products/gtx-1660-6gb/04.jpg"
+    ],
+    "i5-14400": [
+      "/parts/products/i5-14400/01.jpg"
+    ],
+    "i5-14400f": [
+      "/parts/products/i5-14400f/01.jpg"
+    ],
+    "innovation-16gb-ddr4": [
+      "/parts/products/innovation-16gb-ddr4/01.jpg"
+    ],
+    "kingston-fury-16gb-ddr5": [
+      "/parts/products/kingston-fury-16gb-ddr5/01.jpg",
+      "/parts/products/kingston-fury-16gb-ddr5/02.jpg",
+      "/parts/products/kingston-fury-16gb-ddr5/03.jpg",
+      "/parts/products/kingston-fury-16gb-ddr5/04.jpg"
+    ],
+    "kingston-fury-32gb-ddr4": [
+      "/parts/products/kingston-fury-32gb-ddr4/01.jpg",
+      "/parts/products/kingston-fury-32gb-ddr4/02.jpg"
+    ],
+    "kingston-fury-32gb-ddr5": [
+      "/parts/products/kingston-fury-32gb-ddr5/01.jpg",
+      "/parts/products/kingston-fury-32gb-ddr5/02.jpg",
+      "/parts/products/kingston-fury-32gb-ddr5/03.jpg",
+      "/parts/products/kingston-fury-32gb-ddr5/04.jpg"
+    ],
+    "kingston-nv3-1tb": [
+      "/parts/products/kingston-nv3-1tb/01.jpg",
+      "/parts/products/kingston-nv3-1tb/02.jpg",
+      "/parts/products/kingston-nv3-1tb/03.jpg",
+      "/parts/products/kingston-nv3-1tb/04.jpg"
+    ],
+    "lexar-nm620-512": [
+      "/parts/products/lexar-nm620-512/01.jpg"
+    ],
+    "msi-a520m-pro": [
+      "/parts/products/msi-a520m-pro/01.jpg",
+      "/parts/products/msi-a520m-pro/02.jpg",
+      "/parts/products/msi-a520m-pro/03.jpg"
+    ],
+    "msi-b550m-pro-vdh": [
+      "/parts/products/msi-b550m-pro-vdh/01.jpg",
+      "/parts/products/msi-b550m-pro-vdh/02.jpg",
+      "/parts/products/msi-b550m-pro-vdh/03.jpg",
+      "/parts/products/msi-b550m-pro-vdh/04.jpg"
+    ],
+    "msi-b550m-wifi": [
+      "/parts/products/msi-b550m-wifi/01.jpg",
+      "/parts/products/msi-b550m-wifi/02.jpg",
+      "/parts/products/msi-b550m-wifi/03.jpg",
+      "/parts/products/msi-b550m-wifi/04.jpg"
+    ],
+    "msi-mag-272f": [
+      "/parts/products/msi-mag-272f/01.jpg",
+      "/parts/products/msi-mag-272f/02.jpg",
+      "/parts/products/msi-mag-272f/03.jpg"
+    ],
+    "msi-mag-forge-100r": [
+      "/parts/products/msi-mag-forge-100r/01.jpg",
+      "/parts/products/msi-mag-forge-100r/02.jpg",
+      "/parts/products/msi-mag-forge-100r/03.jpg",
+      "/parts/products/msi-mag-forge-100r/04.jpg"
+    ],
+    "msi-mag-forge-120a": [
+      "/parts/products/msi-mag-forge-120a/01.jpg",
+      "/parts/products/msi-mag-forge-120a/02.jpg",
+      "/parts/products/msi-mag-forge-120a/03.jpg",
+      "/parts/products/msi-mag-forge-120a/04.jpg"
+    ],
+    "msi-pro-b650-s-wifi": [
+      "/parts/products/msi-pro-b650-s-wifi/01.jpg",
+      "/parts/products/msi-pro-b650-s-wifi/02.jpg",
+      "/parts/products/msi-pro-b650-s-wifi/03.jpg"
+    ],
+    "msi-pro-b650m-b": [
+      "/parts/products/msi-pro-b650m-b/01.jpg",
+      "/parts/products/msi-pro-b650m-b/02.jpg",
+      "/parts/products/msi-pro-b650m-b/03.jpg"
+    ],
+    "rtx-4060-8gb": [
+      "/parts/products/rtx-4060-8gb/01.jpg",
+      "/parts/products/rtx-4060-8gb/02.jpg",
+      "/parts/products/rtx-4060-8gb/03.jpg",
+      "/parts/products/rtx-4060-8gb/04.jpg"
+    ],
+    "rtx-5060-8gb": [
+      "/parts/products/rtx-5060-8gb/01.jpg",
+      "/parts/products/rtx-5060-8gb/02.jpg",
+      "/parts/products/rtx-5060-8gb/03.jpg",
+      "/parts/products/rtx-5060-8gb/04.jpg"
+    ],
+    "rtx-5060-ti-16g": [
+      "/parts/products/rtx-5060-ti-16g/01.jpg",
+      "/parts/products/rtx-5060-ti-16g/02.jpg",
+      "/parts/products/rtx-5060-ti-16g/03.jpg",
+      "/parts/products/rtx-5060-ti-16g/04.jpg"
+    ],
+    "rtx-5060-ti-8g": [
+      "/parts/products/rtx-5060-ti-8g/01.jpg",
+      "/parts/products/rtx-5060-ti-8g/02.jpg",
+      "/parts/products/rtx-5060-ti-8g/03.jpg",
+      "/parts/products/rtx-5060-ti-8g/04.jpg"
+    ],
     "ryzen-5-5500": [
       "/parts/products/ryzen-5-5500/01.jpg",
       "/parts/products/ryzen-5-5500/02.jpg"
@@ -10,154 +173,27 @@
     "ryzen-5-7600": [
       "/parts/products/ryzen-5-7600/01.jpg"
     ],
-    "i5-14400f": [],
-    "i5-14400": [],
-    "rtx-5060-8gb": [],
-    "rtx-4060-8gb": [
-      "/parts/products/rtx-4060-8gb/01.jpg",
-      "/parts/products/rtx-4060-8gb/02.jpg",
-      "/parts/products/rtx-4060-8gb/03.jpg",
-      "/parts/products/rtx-4060-8gb/04.jpg"
+    "samsung-990-evo-1tb": [
+      "/parts/products/samsung-990-evo-1tb/01.jpg",
+      "/parts/products/samsung-990-evo-1tb/02.jpg",
+      "/parts/products/samsung-990-evo-1tb/03.jpg"
     ],
-    "rtx-5060-ti-8g": [
-      "/parts/products/rtx-5060-ti-8g/01.jpg",
-      "/parts/products/rtx-5060-ti-8g/02.jpg",
-      "/parts/products/rtx-5060-ti-8g/03.jpg",
-      "/parts/products/rtx-5060-ti-8g/04.jpg"
+    "wd-sn580-500": [
+      "/parts/products/wd-sn580-500/01.jpg",
+      "/parts/products/wd-sn580-500/02.jpg",
+      "/parts/products/wd-sn580-500/03.jpg"
     ],
-    "rtx-5060-ti-16g": [
-      "/parts/products/rtx-5060-ti-16g/01.jpg",
-      "/parts/products/rtx-5060-ti-16g/02.jpg",
-      "/parts/products/rtx-5060-ti-16g/03.jpg",
-      "/parts/products/rtx-5060-ti-16g/04.jpg"
+    "msi-mag-242f": [
+      "/parts/products/msi-mag-242f/01.jpg",
+      "/parts/products/msi-mag-242f/02.jpg",
+      "/parts/products/msi-mag-242f/03.jpg"
     ],
-    "gtx-1660-6gb": [],
-    "dp-ak400-digital-se": [],
-    "dp-ak400-zero-dark": [
-      "/parts/products/dp-ak400-zero-dark/01.jpg",
-      "/parts/products/dp-ak400-zero-dark/02.jpg",
-      "/parts/products/dp-ak400-zero-dark/03.jpg",
-      "/parts/products/dp-ak400-zero-dark/04.jpg"
-    ],
-    "dp-ak400-digital": [
-      "/parts/products/dp-ak400-digital/01.jpg",
-      "/parts/products/dp-ak400-digital/02.jpg",
-      "/parts/products/dp-ak400-digital/03.jpg",
-      "/parts/products/dp-ak400-digital/04.jpg"
-    ],
-    "msi-b550m-pro-vdh": [],
-    "msi-b550m-wifi": [],
-    "gigabyte-b550m-ds3h": [],
-    "msi-a520m-pro": [],
-    "asrock-b550m-hdv": [],
-    "msi-pro-b650m-b": [],
-    "msi-pro-b650-s-wifi": [],
-    "gigabyte-b650m-plus-wifi": [],
-    "kingston-fury-32gb-ddr4": [],
-    "innovation-16gb-ddr4": [
-      "/parts/products/innovation-16gb-ddr4/01.jpg"
-    ],
-    "gskill-aegis-16gb-ddr4": [],
-    "corsair-vengeance-32gb-ddr5": [],
-    "kingston-fury-32gb-ddr5": [],
-    "kingston-fury-16gb-ddr5": [],
-    "kingston-nv3-1tb": [],
-    "samsung-990-evo-1tb": [],
-    "lexar-nm620-512": [
-      "/parts/products/lexar-nm620-512/01.jpg"
-    ],
-    "wd-sn580-500": [],
-    "crucial-bx500-500": [],
-    "corsair-cv650": [],
-    "corsair-rm850e": [],
-    "msi-mag-forge-120a": [],
-    "msi-mag-forge-100r": [],
-    "msi-mag-272f": [],
-    "msi-mag-242f": [],
-    "msi-coreliquid-e240": []
+    "msi-coreliquid-e240": [
+      "/parts/products/msi-coreliquid-e240/01.jpg",
+      "/parts/products/msi-coreliquid-e240/02.jpg",
+      "/parts/products/msi-coreliquid-e240/03.jpg",
+      "/parts/products/msi-coreliquid-e240/04.jpg"
+    ]
   },
-  "errors": [
-    "i5-14400f img https://www.ultrapc.ma/49031-large_default/intel-core-i5-14400f-ju: HTTP Error 404: Not Found",
-    "i5-14400 img https://www.ultrapc.ma/49119-large_default/intel-core-i5-14400-ju: HTTP Error 404: Not Found",
-    "rtx-5060-8gb img https://www.ultrapc.ma/52336-large_default/m: HTTP Error 404: Not Found",
-    "rtx-5060-8gb img https://www.ultrapc.ma/52337-large_default/m: HTTP Error 404: Not Found",
-    "rtx-5060-8gb img https://www.ultrapc.ma/52338-large_default/m: HTTP Error 404: Not Found",
-    "rtx-5060-8gb img https://www.ultrapc.ma/52339-large_default/m: HTTP Error 404: Not Found",
-    "gtx-1660-6gb img https://www.ultrapc.ma/11070-large_default/m: HTTP Error 404: Not Found",
-    "gtx-1660-6gb img https://www.ultrapc.ma/11071-large_default/m: HTTP Error 404: Not Found",
-    "gtx-1660-6gb img https://www.ultrapc.ma/11072-large_default/m: HTTP Error 404: Not Found",
-    "gtx-1660-6gb img https://www.ultrapc.ma/11073-large_default/m: HTTP Error 404: Not Found",
-    "dp-ak400-digital-se img https://www.ultrapc.ma/60119-large_default/deepcool-ak400-digital-: HTTP Error 404: Not Found",
-    "dp-ak400-digital-se img https://www.ultrapc.ma/60122-large_default/deepcool-ak400-digital-: HTTP Error 404: Not Found",
-    "dp-ak400-digital-se img https://www.ultrapc.ma/60120-large_default/deepcool-ak400-digital-: HTTP Error 404: Not Found",
-    "dp-ak400-digital-se img https://www.ultrapc.ma/60121-large_default/deepcool-ak400-digital-: HTTP Error 404: Not Found",
-    "msi-b550m-pro-vdh img https://www.ultrapc.ma/16340-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-pro-vdh img https://www.ultrapc.ma/16341-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-pro-vdh img https://www.ultrapc.ma/64117-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-pro-vdh img https://www.ultrapc.ma/16342-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-wifi img https://www.ultrapc.ma/24641-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-wifi img https://www.ultrapc.ma/66492-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-wifi img https://www.ultrapc.ma/66491-large_default/m: HTTP Error 404: Not Found",
-    "msi-b550m-wifi img https://www.ultrapc.ma/24642-large_default/m: HTTP Error 404: Not Found",
-    "gigabyte-b550m-ds3h img https://www.ultrapc.ma/15778-large_default/gigabyte-b550m-d: HTTP Error 404: Not Found",
-    "gigabyte-b550m-ds3h img https://www.ultrapc.ma/15779-large_default/gigabyte-b550m-d: HTTP Error 404: Not Found",
-    "gigabyte-b550m-ds3h img https://www.ultrapc.ma/64118-large_default/gigabyte-b550m-d: HTTP Error 404: Not Found",
-    "gigabyte-b550m-ds3h img https://www.ultrapc.ma/15780-large_default/gigabyte-b550m-d: HTTP Error 404: Not Found",
-    "msi-a520m-pro img https://www.ultrapc.ma/15747-large_default/m: HTTP Error 404: Not Found",
-    "msi-a520m-pro img https://www.ultrapc.ma/15748-large_default/m: HTTP Error 404: Not Found",
-    "msi-a520m-pro img https://www.ultrapc.ma/15749-large_default/m: HTTP Error 404: Not Found",
-    "asrock-b550m-hdv img https://www.ultrapc.ma/34282-large_default/a: HTTP Error 404: Not Found",
-    "asrock-b550m-hdv img https://www.ultrapc.ma/34281-large_default/a: HTTP Error 404: Not Found",
-    "asrock-b550m-hdv img https://www.ultrapc.ma/34279-large_default/a: HTTP Error 404: Not Found",
-    "asrock-b550m-hdv img https://www.ultrapc.ma/34280-large_default/a: HTTP Error 404: Not Found",
-    "msi-pro-b650m-b img https://www.ultrapc.ma/35873-large_default/m: HTTP Error 404: Not Found",
-    "msi-pro-b650m-b img https://www.ultrapc.ma/35872-large_default/m: HTTP Error 404: Not Found",
-    "msi-pro-b650m-b img https://www.ultrapc.ma/35871-large_default/m: HTTP Error 404: Not Found",
-    "msi-pro-b650-s-wifi img https://www.ultrapc.ma/29502-large_default/m: HTTP Error 404: Not Found",
-    "msi-pro-b650-s-wifi img https://www.ultrapc.ma/29503-large_default/m: HTTP Error 404: Not Found",
-    "msi-pro-b650-s-wifi img https://www.ultrapc.ma/29504-large_default/m: HTTP Error 404: Not Found",
-    "gigabyte-b650m-plus-wifi img https://www.ultrapc.ma/55493-large_default/gigabyte-b650m-gaming-plu: HTTP Error 404: Not Found",
-    "gigabyte-b650m-plus-wifi img https://www.ultrapc.ma/55494-large_default/gigabyte-b650m-gaming-plu: HTTP Error 404: Not Found",
-    "gigabyte-b650m-plus-wifi img https://www.ultrapc.ma/55495-large_default/gigabyte-b650m-gaming-plu: HTTP Error 404: Not Found",
-    "gigabyte-b650m-plus-wifi img https://www.ultrapc.ma/55496-large_default/gigabyte-b650m-gaming-plu: HTTP Error 404: Not Found",
-    "kingston-fury-32gb-ddr4 img https://www.ultrapc.ma/31580-large_default/king: HTTP Error 404: Not Found",
-    "kingston-fury-32gb-ddr4 img https://www.ultrapc.ma/31581-large_default/king: HTTP Error 404: Not Found",
-    "kingston-fury-32gb-ddr4 img https://www.ultrapc.ma/31582-large_default/king: HTTP Error 404: Not Found",
-    "gskill-aegis-16gb-ddr4 img https://www.ultrapc.ma/25434-large_default/g: HTTP Error 404: Not Found",
-    "gskill-aegis-16gb-ddr4 img https://www.ultrapc.ma/25435-large_default/g: HTTP Error 404: Not Found",
-    "corsair-vengeance-32gb-ddr5 img https://www.ultrapc.ma/41344-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-vengeance-32gb-ddr5 img https://www.ultrapc.ma/41345-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-vengeance-32gb-ddr5 img https://www.ultrapc.ma/41346-large_default/cor: HTTP Error 404: Not Found",
-    "kingston-fury-32gb-ddr5 img https://www.ultrapc.ma/57253-large_default/king: HTTP Error 404: Not Found",
-    "kingston-fury-32gb-ddr5 img https://www.ultrapc.ma/57252-large_default/king: HTTP Error 404: Not Found",
-    "kingston-fury-16gb-ddr5 img https://www.ultrapc.ma/48965-large_default/king: HTTP Error 404: Not Found",
-    "kingston-nv3-1tb img https://www.ultrapc.ma/45124-large_default/king: HTTP Error 404: Not Found",
-    "kingston-nv3-1tb img https://www.ultrapc.ma/45125-large_default/king: HTTP Error 404: Not Found",
-    "kingston-nv3-1tb img https://www.ultrapc.ma/45126-large_default/king: HTTP Error 404: Not Found",
-    "wd-sn580-500 img https://www.ultrapc.ma/43679-large_default/we: HTTP Error 404: Not Found",
-    "wd-sn580-500 img https://www.ultrapc.ma/43678-large_default/we: HTTP Error 404: Not Found",
-    "wd-sn580-500 img https://www.ultrapc.ma/43677-large_default/we: HTTP Error 404: Not Found",
-    "crucial-bx500-500 img https://www.ultrapc.ma/45121-large_default/crucial-bx500-25-: HTTP Error 404: Not Found",
-    "crucial-bx500-500 img https://www.ultrapc.ma/45120-large_default/crucial-bx500-25-: HTTP Error 404: Not Found",
-    "corsair-cv650 img https://www.ultrapc.ma/13537-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-cv650 img https://www.ultrapc.ma/13538-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-cv650 img https://www.ultrapc.ma/13539-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-rm850e img https://www.ultrapc.ma/49942-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-rm850e img https://www.ultrapc.ma/49943-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-rm850e img https://www.ultrapc.ma/49944-large_default/cor: HTTP Error 404: Not Found",
-    "corsair-rm850e img https://www.ultrapc.ma/49945-large_default/cor: HTTP Error 404: Not Found",
-    "msi-mag-forge-120a img https://www.ultrapc.ma/36698-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-120a img https://www.ultrapc.ma/36699-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-120a img https://www.ultrapc.ma/36700-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-120a img https://www.ultrapc.ma/36701-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-100r img https://www.ultrapc.ma/15334-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-100r img https://www.ultrapc.ma/15335-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-forge-100r img https://www.ultrapc.ma/15336-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-272f img https://www.ultrapc.ma/66562-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-272f img https://www.ultrapc.ma/66563-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-272f img https://www.ultrapc.ma/66564-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-272f img https://www.ultrapc.ma/66565-large_default/m: HTTP Error 404: Not Found",
-    "msi-mag-242f page: HTTP Error 403: Forbidden",
-    "msi-coreliquid-e240 page: HTTP Error 403: Forbidden"
-  ]
+  "errors": []
 }

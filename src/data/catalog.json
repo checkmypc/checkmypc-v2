@@ -599,7 +599,7 @@
     {
       "id": "dp-ak400",
       "category": "cooler",
-      "name": "Deepcool AK400",
+      "name": "DeepCool AK400",
       "brand": "Deepcool",
       "image": "/parts/cooler.svg",
       "msrp": 299,
@@ -3336,6 +3336,824 @@
           "p": 380
         }
       ]
+    },
+    {
+      "id": "ryzen-5-5500",
+      "category": "cpu",
+      "name": "AMD Ryzen 5 5500",
+      "brand": "AMD",
+      "image": "/parts/products/ryzen-5-5500/01.jpg",
+      "images": [
+        "/parts/products/ryzen-5-5500/01.jpg",
+        "/parts/products/ryzen-5-5500/02.jpg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "ryzen-5-5600-used",
+      "category": "cpu",
+      "name": "AMD Ryzen 5 5600 (used)",
+      "brand": "AMD",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "ryzen-5-8600g",
+      "category": "cpu",
+      "name": "AMD Ryzen 5 8600G",
+      "brand": "AMD",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "ryzen-7-5800x3d",
+      "category": "cpu",
+      "name": "AMD Ryzen 7 5800X3D",
+      "brand": "AMD",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "ryzen-7-7800x3d",
+      "category": "cpu",
+      "name": "AMD Ryzen 7 7800X3D",
+      "brand": "AMD",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "ultra-7-265k",
+      "category": "cpu",
+      "name": "Intel Core Ultra 7 265K",
+      "brand": "Intel",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "i3-12100",
+      "category": "cpu",
+      "name": "Intel Core i3-12100",
+      "brand": "Intel",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "i5-14400",
+      "category": "cpu",
+      "name": "Intel Core i5-14400",
+      "brand": "Intel",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "i5-14400f",
+      "category": "cpu",
+      "name": "Intel Core i5-14400F",
+      "brand": "Intel",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "i7-14700k",
+      "category": "cpu",
+      "name": "Intel Core i7-14700K",
+      "brand": "Intel",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 90,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "arctic-liquid-freezer-iii-360",
+      "category": "cooler",
+      "name": "Arctic Liquid Freezer III 360",
+      "brand": "Arctic",
+      "image": "/parts/cooler.svg",
+      "images": [
+        "/parts/cooler.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 5,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "deepcool-ak400-digital",
+      "category": "cooler",
+      "name": "DeepCool AK400 Digital",
+      "brand": "DeepCool",
+      "image": "/parts/cooler.svg",
+      "images": [
+        "/parts/cooler.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 5,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "deepcool-ak400-zero-dark",
+      "category": "cooler",
+      "name": "Deepcool AK400 Zero Dark",
+      "brand": "Deepcool",
+      "image": "/parts/cooler.svg",
+      "images": [
+        "/parts/cooler.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 5,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "noctua-nh-d15",
+      "category": "cooler",
+      "name": "Noctua NH-D15",
+      "brand": "Noctua",
+      "image": "/parts/cooler.svg",
+      "images": [
+        "/parts/cooler.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 5,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "noctua-nh-l9a-am5",
+      "category": "cooler",
+      "name": "Noctua NH-L9a-AM5",
+      "brand": "Noctua",
+      "image": "/parts/cooler.svg",
+      "images": [
+        "/parts/cooler.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 5,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "asrock-b650m-hdv-m2",
+      "category": "motherboard",
+      "name": "ASRock B650M-HDV/M.2",
+      "brand": "ASRock",
+      "image": "/parts/motherboard.svg",
+      "images": [
+        "/parts/motherboard.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 30,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "gigabyte-b760m-ds3h-ddr4",
+      "category": "motherboard",
+      "name": "Gigabyte B760M DS3H DDR4",
+      "brand": "Gigabyte",
+      "image": "/parts/motherboard.svg",
+      "images": [
+        "/parts/motherboard.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 30,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "msi-mag-b650-tomahawk-wifi",
+      "category": "motherboard",
+      "name": "MSI MAG B650 TOMAHAWK WIFI",
+      "brand": "MSI",
+      "image": "/parts/motherboard.svg",
+      "images": [
+        "/parts/motherboard.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 30,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "crucial-16gb-ddr5-5600-sodimm",
+      "category": "ram",
+      "name": "Crucial 16GB DDR5-5600 SODIMM",
+      "brand": "Crucial",
+      "image": "/parts/ram.svg",
+      "images": [
+        "/parts/ram.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "gskill-ripjaws-32gb-ddr4-3600",
+      "category": "ram",
+      "name": "G.Skill Ripjaws V 32GB (2x16) DDR4-3600",
+      "brand": "G.Skill",
+      "image": "/parts/ram.svg",
+      "images": [
+        "/parts/ram.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "innovation-it-16gb-ddr4-3200",
+      "category": "ram",
+      "name": "Innovation IT 16GB DDR4-3200 CL16",
+      "brand": "Innovation IT",
+      "image": "/parts/ram.svg",
+      "images": [
+        "/parts/ram.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "lexar-nm620-512gb",
+      "category": "storage",
+      "name": "Lexar NM620 512GB",
+      "brand": "Lexar",
+      "image": "/parts/ssd.svg",
+      "images": [
+        "/parts/ssd.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "samsung-870-evo-1tb",
+      "category": "storage",
+      "name": "Samsung 870 EVO 1TB",
+      "brand": "Samsung",
+      "image": "/parts/ssd.svg",
+      "images": [
+        "/parts/ssd.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "wd-black-sn770-1tb",
+      "category": "storage",
+      "name": "WD Black SN770 1TB",
+      "brand": "Western Digital",
+      "image": "/parts/ssd.svg",
+      "images": [
+        "/parts/ssd.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "gigabyte-rtx-4060-gaming-oc-8g",
+      "category": "gpu",
+      "name": "Gigabyte GeForce RTX 4060 Gaming OC 8G",
+      "brand": "Gigabyte",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 200,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "gigabyte-rtx-5060-ti-eagle-oc-ice-16g",
+      "category": "gpu",
+      "name": "Gigabyte GeForce RTX 5060 Ti Eagle OC ICE 16G",
+      "brand": "Gigabyte",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 200,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "gigabyte-rtx-5060-ti-gaming-oc-8g",
+      "category": "gpu",
+      "name": "Gigabyte GeForce RTX 5060 Ti Gaming OC 8G",
+      "brand": "Gigabyte",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 200,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "intel-arc-b580",
+      "category": "gpu",
+      "name": "Intel Arc B580 Limited Edition 12GB",
+      "brand": "Intel",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 200,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "sapphire-pulse-rx-7800-xt",
+      "category": "gpu",
+      "name": "Sapphire Pulse Radeon RX 7800 XT 16GB",
+      "brand": "Sapphire",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 200,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "corsair-sf750",
+      "category": "psu",
+      "name": "Corsair SF750",
+      "brand": "Corsair",
+      "image": "/parts/psu.svg",
+      "images": [
+        "/parts/psu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 50,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "seasonic-focus-gx-750",
+      "category": "psu",
+      "name": "Seasonic Focus GX-750",
+      "brand": "Seasonic",
+      "image": "/parts/psu.svg",
+      "images": [
+        "/parts/psu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 50,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "cooler-master-nr200p",
+      "category": "case",
+      "name": "Cooler Master NR200P",
+      "brand": "Cooler Master",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 20,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "fractal-design-north",
+      "category": "case",
+      "name": "Fractal Design North",
+      "brand": "Fractal Design",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 20,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "lian-li-lancool-207",
+      "category": "case",
+      "name": "Lian Li Lancool 207",
+      "brand": "Lian Li",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 20,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "lg-27gp850-b",
+      "category": "display",
+      "name": "LG UltraGear 27GP850-B",
+      "brand": "LG",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 40,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "samsung-odyssey-g5-27",
+      "category": "display",
+      "name": "Samsung Odyssey G5 27",
+      "brand": "Samsung",
+      "image": "/parts/gpu.svg",
+      "images": [
+        "/parts/gpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 40,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "fifine-am8",
+      "category": "peripheral",
+      "name": "Fifine AmpliGame AM8",
+      "brand": "Fifine",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 15,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "logitech-c920",
+      "category": "peripheral",
+      "name": "Logitech C920",
+      "brand": "Logitech",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 15,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "steelseries-qck-large",
+      "category": "peripheral",
+      "name": "SteelSeries QcK Large",
+      "brand": "SteelSeries",
+      "image": "/parts/case.svg",
+      "images": [
+        "/parts/case.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 15,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "apc-back-ups-700",
+      "category": "ups",
+      "name": "APC Back-UPS 700VA",
+      "brand": "APC",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "asus-drw-24d5mt",
+      "category": "optical",
+      "name": "ASUS DRW-24D5MT",
+      "brand": "ASUS",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "keychron-k2",
+      "category": "keyboard",
+      "name": "Keychron K2",
+      "brand": "Keychron",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
+    },
+    {
+      "id": "logitech-gpx-superlight",
+      "category": "mouse",
+      "name": "Logitech G Pro X Superlight",
+      "brand": "Logitech",
+      "image": "/parts/cpu.svg",
+      "images": [
+        "/parts/cpu.svg"
+      ],
+      "msrp": 0,
+      "best_price": 0,
+      "used_price": 0,
+      "in_stock": false,
+      "store_count": 0,
+      "power_draw": 10,
+      "specs": {},
+      "offers": [],
+      "history": []
     }
   ],
   "dataStatus": "demo",

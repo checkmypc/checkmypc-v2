@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Bell, BellOff } from "lucide-react";
+import { ProductGallery } from "@/components/product-gallery";
 import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -49,17 +50,25 @@ function ProductPage() {
 
   return (
     <main>
-      <PageHero eyebrow={p.brand} title={p.name} description={`${p.store_count} ${t("ui.stores")} · ${t("ui.demo")}`}>
+      <PageHero
+        eyebrow={p.brand}
+        title={p.name}
+        description={p.store_count > 0 ? `${p.store_count} ${t("ui.stores")} · ${t("ui.demo")}` : t("ui.priceUnavailable")}
+      >
         <div className="flex flex-wrap items-end gap-6">
           <div>
-            <p className="text-xs text-muted">{t("ui.best")}</p>
-            <p className="font-display text-4xl font-semibold tabular-nums ltr-isolate">{dh(p.best_price)}</p>
+            <p className="text-xs text-muted">{p.store_count > 0 ? t("ui.best") : t("ui.priceUnavailable")}</p>
+            {p.store_count > 0 && (
+              <p className="font-display text-4xl font-semibold tabular-nums ltr-isolate">{dh(p.best_price)}</p>
+            )}
           </div>
-          <div className="text-sm text-muted">
-            {t("ui.msrp")} <span className="ltr-isolate">{dh(p.msrp)}</span>
-            <br />
-            {t("ui.usedPrice")} <span className="ltr-isolate">{dh(p.used_price)}</span>
-          </div>
+          {p.store_count > 0 && (
+            <div className="text-sm text-muted">
+              {t("ui.msrp")} <span className="ltr-isolate">{dh(p.msrp)}</span>
+              <br />
+              {t("ui.usedPrice")} <span className="ltr-isolate">{dh(p.used_price)}</span>
+            </div>
+          )}
         </div>
         <div className="mt-5 flex flex-wrap gap-2">
           <Button onClick={() => add(p.id, p.category)}>{inBuild ? t("ui.inBuild") : t("ui.addBuild")}</Button>
@@ -75,13 +84,13 @@ function ProductPage() {
         </div>
       </PageHero>
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_1.15fr]">
-        <Card className="grid place-items-center rounded-2xl p-8">
-          <img src={p.image} alt="" className="part-art h-64 w-full object-contain" />
+        <Card className="rounded-2xl p-3 sm:p-5">
+          <ProductGallery key={p.id} product={p} />
         </Card>
         <Card className="rounded-2xl p-0">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <h2 className="font-display text-lg font-semibold">{t("ui.offers")}</h2>
-            <Badge tone="primary">{t("ui.lowest")}</Badge>
+            {offer && <Badge tone="primary">{t("ui.lowest")}</Badge>}
           </div>
           <ul>
             {sorted.map((o, i) => {
@@ -128,12 +137,20 @@ function ProductPage() {
           <h2 className="mb-3 font-display text-lg font-semibold">{t("ui.specs")}</h2>
           <table className="w-full text-sm">
             <tbody>
-              {Object.entries(p.specs).map(([k, v]) => (
-                <tr key={k} className="border-b border-border last:border-0">
-                  <th className="py-2 pe-4 text-start font-medium text-muted">{k}</th>
-                  <td className="py-2 ltr-isolate">{v}</td>
-                </tr>
-              ))}
+                {Object.entries(p.specs).length > 0 ? (
+                  Object.entries(p.specs).map(([k, v]) => (
+                    <tr key={k} className="border-b border-border last:border-0">
+                      <th className="py-2 pe-4 text-start font-medium text-muted">{k}</th>
+                      <td className="py-2 ltr-isolate">{v}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={2} className="py-3 text-sm text-muted">
+                      {t("ui.specsUnavailable")}
+                    </td>
+                  </tr>
+                )}
             </tbody>
           </table>
         </Card>

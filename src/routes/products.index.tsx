@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/page-hero";
-import { ProductRow } from "@/components/product-card";
+import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
-import { CATEGORY_ORDER, categoryLabel, allProducts } from "@/lib/catalog";
+import { CATEGORY_ORDER, categoryLabel, allProducts, includeManifestComponents } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { useOps } from "@/lib/ops";
 import type { CategorySlug } from "@/lib/types";
@@ -23,7 +23,11 @@ export const Route = createFileRoute("/products/")({
 export function ProductsPage() {
   const { t } = useI18n();
   const { category, q } = Route.useSearch();
-  const products = useOps((s) => (s.hydrated ? s.products : allProducts()));
+  const liveProducts = useOps((s) => (s.hydrated ? s.products : undefined));
+  const products = useMemo(
+    () => (liveProducts ? includeManifestComponents(liveProducts) : allProducts()),
+    [liveProducts],
+  );
   const [budget, setBudget] = useState(8000);
   const [brand, setBrand] = useState("");
   const [sort, setSort] = useState("price-asc");
@@ -47,6 +51,8 @@ export function ProductsPage() {
       return true;
     });
     list = [...list].sort((a, b) => {
+      if (a.offers.length === 0 && b.offers.length > 0) return 1;
+      if (a.offers.length > 0 && b.offers.length === 0) return -1;
       if (sort === "price-desc") return b.best_price - a.best_price;
       if (sort === "stores") return b.store_count - a.store_count;
       if (sort === "name") return a.name.localeCompare(b.name);
@@ -133,11 +139,13 @@ export function ProductsPage() {
               <option value="name">{t("ui.sort.name")}</option>
             </select>
           </div>
-          <div className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
             {rows.length === 0 ? (
-              <p className="p-10 text-center text-sm text-muted">{t("ui.noResults")}</p>
+              <p className="col-span-full rounded-xl bg-surface p-10 text-center text-sm text-muted shadow-[var(--shadow-border)]">
+                {t("ui.noResults")}
+              </p>
             ) : (
-              rows.map((p) => <ProductRow key={p.id} product={p} />)
+              rows.map((p) => <ProductCard key={p.id} product={p} />)
             )}
           </div>
         </section>

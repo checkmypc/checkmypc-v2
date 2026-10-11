@@ -74,7 +74,7 @@ function BuilderPage() {
                   <option value="">{t("ui.choose")}</option>
                   {parts.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name} — {dh(p.best_price)}
+                      {p.name} — {p.offers.length > 0 ? dh(p.best_price) : t("ui.priceUnavailable")}
                     </option>
                   ))}
                 </select>
@@ -144,5 +144,4 @@ function BuilderPage() {
     </main>
   );
 }
-
 

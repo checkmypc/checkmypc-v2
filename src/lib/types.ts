@@ -62,6 +62,11 @@ export type CatalogFile = {
   products: Product[];
 };
 
+export type ProductImageManifest = {
+  manifest: Record<string, string[]>;
+  errors?: string[];
+};
+
 export type Lang = "en" | "fr" | "ar";
 export type Theme = "light" | "dark";
 

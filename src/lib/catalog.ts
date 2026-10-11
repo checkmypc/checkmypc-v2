@@ -1,7 +1,10 @@
 import raw from "@/data/catalog.json";
-import type { CatalogFile, CategorySlug, Product } from "./types";
+import { MANIFEST_COMPONENTS } from "@/data/manifest-components";
+import type { CatalogFile, CategorySlug, Product, ProductImageManifest } from "./types";
 
 export const catalog = raw as unknown as CatalogFile;
+const catalogIds = new Set(catalog.products.map((product) => product.id));
+catalog.products.push(...MANIFEST_COMPONENTS.filter((product) => !catalogIds.has(product.id)));
 
 export const CATEGORY_ORDER: CategorySlug[] = [
   "cpu",
@@ -32,9 +35,14 @@ export function bindLiveProducts(fn: () => Product[] | undefined) {
   liveProductsFn = fn;
 }
 
+export function includeManifestComponents(products: Product[]): Product[] {
+  const productIds = new Set(products.map((product) => product.id));
+  return [...products, ...MANIFEST_COMPONENTS.filter((product) => !productIds.has(product.id))];
+}
+
 export function allProducts(): Product[] {
   const live = liveProductsFn?.();
-  return live && live.length ? live : catalog.products;
+  return includeManifestComponents(live && live.length ? live : catalog.products);
 }
 
 export function productById(id: string): Product | undefined {
@@ -81,18 +89,56 @@ export function recomputeProduct(p: Product): Product {
   };
 }
 
-export function productGallery(p: Product): string[] {
-  const extra = (p.images ?? []).filter(Boolean);
-  const unique = [...new Set([p.image, ...extra].filter(Boolean))];
-  if (unique.length >= 2) return unique;
-  const slug = p.category === "storage" ? "storage" : p.category;
-  const studio = [
-    `/parts/studio/${slug}-front.jpg`,
-    `/parts/studio/${slug}-side.jpg`,
-    `/parts/studio/${slug}-rear.jpg`,
-    `/parts/studio/${slug}-detail.jpg`,
-  ];
-  return [...new Set([...unique, ...studio])];
+function productPhotoPath(path: string): string | undefined {
+  const normalized = path.trim().replace(/^\/+/, "");
+  if (
+    !normalized.startsWith("parts/products/") ||
+    !/\.(?:jpe?g|png|webp|gif|avif)$/i.test(normalized) ||
+    normalized.split("/").some((part) => part === "." || part === "..")
+  ) {
+    return undefined;
+  }
+  return `/${normalized}`;
+}
+
+export function productGallery(p: Product, imageManifest?: ProductImageManifest): string[] {
+  const manifestImages = imageManifest?.manifest[p.id] ?? [];
+  const listedImages = [...manifestImages, ...(p.images ?? []), p.image];
+  return [...new Set(listedImages.map(productPhotoPath).filter((path): path is string => Boolean(path)))];
+}
+
+let productImageManifestRequest: Promise<ProductImageManifest> | undefined;
+
+export function loadProductImageManifest(): Promise<ProductImageManifest> {
+  if (!productImageManifestRequest) {
+    productImageManifestRequest = fetch("/parts/products/manifest.json")
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Could not load product image manifest (${response.status})`);
+        }
+        const value: unknown = await response.json();
+        if (
+          typeof value !== "object" ||
+          value === null ||
+          !("manifest" in value) ||
+          typeof value.manifest !== "object" ||
+          value.manifest === null
+        ) {
+          throw new Error("Product image manifest has an invalid format");
+        }
+        for (const images of Object.values(value.manifest)) {
+          if (!Array.isArray(images) || !images.every((image) => typeof image === "string")) {
+            throw new Error("Product image manifest contains an invalid image list");
+          }
+        }
+        return value as ProductImageManifest;
+      })
+      .catch((error: unknown) => {
+        productImageManifestRequest = undefined;
+        throw error;
+      });
+  }
+  return productImageManifestRequest;
 }
 
 export const DATA_GENERATED = catalog.generated;
