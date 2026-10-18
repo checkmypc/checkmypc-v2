@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci --omit=dev --no-audit --no-fund
+      - run: npm install --omit=dev --no-audit --no-fund
       - name: Run offline collector tests
         run: node --test scripts/price-collector.test.mjs
       - name: Collect permitted public product data
