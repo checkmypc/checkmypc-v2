@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n";
 import { useOps } from "@/lib/ops";
 import { prebuilts } from "@/lib/prebuilts";
 import { ASSEMBLY, CLEANING, INSPECTION, STEPS, livePackages } from "@/lib/services";
+import { categoryStudioImage } from "@/lib/theme-images";
 import type { CategorySlug } from "@/lib/types";
 import { dh } from "@/lib/utils";
 
@@ -33,7 +34,7 @@ const FEATURED_SYSTEM_IMAGES: Record<string, string> = {
 };
 
 function Home() {
-  const { t } = useI18n();
+  const { t, theme } = useI18n();
   const hydrated = useOps((s) => s.hydrated);
   const storedProducts = useOps((s) => s.products);
   const sourceProducts = hydrated ? storedProducts : allProducts();
@@ -41,7 +42,9 @@ function Home() {
   useOps((s) => s.recipes);
   useOps((s) => s.packagePrices);
   const featured = prebuilts().filter((p) => p.id in FEATURED_SYSTEM_IMAGES);
-  const hot = [...products].sort((a, b) => b.msrp - b.best_price - (a.msrp - a.best_price)).slice(0, 4);
+  const hot = [...products]
+    .sort((a, b) => b.msrp - b.best_price - (a.msrp - a.best_price))
+    .slice(0, 4);
 
   return (
     <main>
@@ -52,7 +55,9 @@ function Home() {
             <p className="mb-4 inline-flex rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold text-primary">
               {t("hero.eyebrow")}
             </p>
-            <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-6xl">{t("hero.title")}</h1>
+            <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-6xl">
+              {t("hero.title")}
+            </h1>
             <p className="mt-2 font-display text-xl text-muted">{t("brand.darija")}</p>
             <p className="mt-5 max-w-xl text-base text-muted">{t("hero.sub")}</p>
             <div className="mt-7 flex flex-wrap gap-2">
@@ -69,7 +74,9 @@ function Home() {
           </div>
           <div className="relative">
             <Card className="rounded-3xl p-6">
-              <p className="mb-4 text-xs font-semibold tracking-[0.14em] text-muted uppercase">{t("hero.badge")}</p>
+              <p className="mb-4 text-xs font-semibold tracking-[0.14em] text-muted uppercase">
+                {t("hero.badge")}
+              </p>
               <div className="grid grid-cols-3 gap-2">
                 {STEPS.map((s) => (
                   <div key={s.id} className="rounded-xl bg-surface-2 px-3 py-3">
@@ -78,7 +85,11 @@ function Home() {
                   </div>
                 ))}
               </div>
-              <img src="/brand/hero-pc.svg" alt="" className="part-art mt-4 h-36 w-full object-contain" />
+              <img
+                src="/brand/hero-pc.svg"
+                alt=""
+                className="part-art mt-4 h-36 w-full object-contain"
+              />
             </Card>
           </div>
         </div>
@@ -101,7 +112,7 @@ function Home() {
             const c = catalog.categories.find((x) => x.slug === slug);
             const n = products.filter((p) => p.category === slug).length;
             const fallback = categoryImage(slug);
-            const image = `/parts/studio/${slug}-front.jpg`;
+            const image = categoryStudioImage(slug, theme);
             return (
               <Link
                 key={slug}
@@ -207,7 +218,9 @@ function Home() {
                 <p className="text-xs text-muted ltr-isolate">
                   {b.cpu} · {b.gpu}
                 </p>
-                <p className="mt-2 font-display text-lg font-semibold tabular-nums ltr-isolate">{dh(b.price)}</p>
+                <p className="mt-2 font-display text-lg font-semibold tabular-nums ltr-isolate">
+                  {dh(b.price)}
+                </p>
               </Card>
             </Link>
           ))}
@@ -218,12 +231,19 @@ function Home() {
         <h2 className="mb-4 font-display text-2xl font-semibold">{t("nav.deals")}</h2>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {hot.map((p) => (
-            <Link key={p.id} to="/products/$id" params={{ id: p.id }} className="lift rounded-2xl bg-surface p-3 shadow-[var(--shadow-border)]">
+            <Link
+              key={p.id}
+              to="/products/$id"
+              params={{ id: p.id }}
+              className="lift rounded-2xl bg-surface p-3 shadow-[var(--shadow-border)]"
+            >
               <div className="product-image-swatch mb-2 grid h-20 place-items-center rounded-lg">
                 <ProductImage product={p} className="part-art mx-auto h-16 object-contain" />
               </div>
               <p className="mt-2 line-clamp-2 text-sm font-medium">{p.name}</p>
-              <p className="product-price font-display tabular-nums ltr-isolate">{dh(p.best_price)}</p>
+              <p className="product-price font-display tabular-nums ltr-isolate">
+                {dh(p.best_price)}
+              </p>
             </Link>
           ))}
         </div>
@@ -233,7 +253,10 @@ function Home() {
         <h2 className="font-display text-2xl font-semibold">{t("trust.title")}</h2>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2">
           {(["trust.1", "trust.2", "trust.3", "trust.4"] as const).map((k) => (
-            <li key={k} className="flex gap-3 rounded-2xl bg-surface p-4 shadow-[var(--shadow-border)]">
+            <li
+              key={k}
+              className="flex gap-3 rounded-2xl bg-surface p-4 shadow-[var(--shadow-border)]"
+            >
               <Check className="mt-0.5 size-4 shrink-0 text-primary" />
               <span className="text-sm">{t(k)}</span>
             </li>
