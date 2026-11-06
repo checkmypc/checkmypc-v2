@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Bell, BellOff } from "lucide-react";
+import { Bell, BellOff, ChevronRight } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { PageHero } from "@/components/page-hero";
@@ -7,7 +7,13 @@ import { ProductAvailability } from "@/components/product-availability";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { allProducts, categoryLabel, lowestOffer, productById, useProductsWithPhotos } from "@/lib/catalog";
+import {
+  allProducts,
+  categoryLabel,
+  lowestOffer,
+  productById,
+  useProductsWithPhotos,
+} from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { useOps } from "@/lib/ops";
 import { useBuild } from "@/lib/store";
@@ -28,7 +34,9 @@ const FRENCH_CATEGORIES: Partial<Record<CategorySlug, string>> = {
 };
 
 function relatedScore(source: Product, candidate: Product) {
-  const sourceSpecs = new Map(Object.entries(source.specs).map(([key, value]) => [key.toLowerCase(), value.toLowerCase()]));
+  const sourceSpecs = new Map(
+    Object.entries(source.specs).map(([key, value]) => [key.toLowerCase(), value.toLowerCase()]),
+  );
   const sharedSpecs = Object.entries(candidate.specs).filter(
     ([key, value]) => sourceSpecs.get(key.toLowerCase()) === value.toLowerCase(),
   ).length;
@@ -82,44 +90,65 @@ function ProductPage() {
     .sort((a, b) => relatedScore(p, b) - relatedScore(p, a) || a.name.localeCompare(b.name))
     .slice(0, 4);
   const displayCategory =
-    lang === "fr" ? FRENCH_CATEGORIES[p.category] ?? categoryLabel(p.category) : categoryLabel(p.category);
+    lang === "fr"
+      ? (FRENCH_CATEGORIES[p.category] ?? categoryLabel(p.category))
+      : categoryLabel(p.category);
 
   return (
     <main>
       <nav
         aria-label={lang === "fr" ? "Fil d'Ariane" : t("product.breadcrumb")}
-        className="mx-auto flex max-w-6xl items-center gap-2 overflow-hidden px-4 pt-5 text-xs text-muted sm:text-sm"
+        className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-2 gap-y-1 px-4 py-4 text-xs text-muted sm:py-5 sm:text-sm"
       >
-        <Link to="/" className="shrink-0 hover:text-primary">
+        <Link
+          to="/"
+          className="shrink-0 rounded-sm transition-colors hover:text-primary focus-visible:text-primary"
+        >
           {t("nav.home")}
         </Link>
-        <span aria-hidden="true">›</span>
-        <Link to="/products" search={{}} className="shrink-0 hover:text-primary">
+        <ChevronRight className="size-3.5 shrink-0 text-muted/60 rtl-flip" aria-hidden="true" />
+        <Link
+          to="/products"
+          search={{}}
+          className="shrink-0 rounded-sm transition-colors hover:text-primary focus-visible:text-primary"
+        >
           {t("nav.components")}
         </Link>
-        <span aria-hidden="true">›</span>
+        <ChevronRight className="size-3.5 shrink-0 text-muted/60 rtl-flip" aria-hidden="true" />
         <Link
           to="/products"
           search={{ category: p.category }}
-          className="shrink-0 hover:text-primary"
+          className="shrink-0 rounded-sm transition-colors hover:text-primary focus-visible:text-primary"
         >
           {displayCategory}
         </Link>
-        <span aria-hidden="true">›</span>
-        <span className="min-w-0 truncate font-medium text-fg" aria-current="page" title={p.name}>
+        <ChevronRight className="size-3.5 shrink-0 text-muted/60 rtl-flip" aria-hidden="true" />
+        <span
+          className="min-w-0 truncate font-semibold text-primary"
+          aria-current="page"
+          title={p.name}
+        >
           {p.name}
         </span>
       </nav>
       <PageHero
         eyebrow={p.brand}
         title={p.name}
-        description={p.store_count > 0 ? `${p.store_count} ${t("ui.stores")} · ${t("ui.demo")}` : t("ui.priceUnavailable")}
+        description={
+          p.store_count > 0
+            ? `${p.store_count} ${t("ui.stores")} · ${t("ui.demo")}`
+            : t("ui.priceUnavailable")
+        }
       >
         <div className="flex flex-wrap items-end gap-6">
           <div>
-            <p className="text-xs text-muted">{p.store_count > 0 ? t("ui.best") : t("ui.priceUnavailable")}</p>
+            <p className="text-xs text-muted">
+              {p.store_count > 0 ? t("ui.best") : t("ui.priceUnavailable")}
+            </p>
             {p.store_count > 0 && (
-              <p className="product-price font-display text-4xl font-bold tabular-nums ltr-isolate">{dh(p.best_price)}</p>
+              <p className="product-price font-display text-4xl font-bold tabular-nums ltr-isolate">
+                {dh(p.best_price)}
+              </p>
             )}
           </div>
           {p.store_count > 0 && (
@@ -132,7 +161,9 @@ function ProductPage() {
           <ProductAvailability product={p} />
         </div>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Button onClick={() => add(p.id, p.category)}>{inBuild ? t("ui.inBuild") : t("ui.addBuild")}</Button>
+          <Button onClick={() => add(p.id, p.category)}>
+            {inBuild ? t("ui.inBuild") : t("ui.addBuild")}
+          </Button>
           <Button variant="secondary" onClick={() => toggleWatch(p.id)}>
             {watching ? <BellOff className="size-4" /> : <Bell className="size-4" />}
             {watching ? t("ui.watching") : t("ui.watch")}
@@ -167,17 +198,28 @@ function ProductPage() {
                     <p className="text-xs text-muted">
                       {o.city} · {ago(o.checked_minutes_ago, t)}
                     </p>
-                    <Badge tone={fresh === "live" ? "ok" : fresh === "recent" ? "primary" : "warn"} className="mt-1">
-                      {t(`ui.${fresh === "stale" ? "stale" : fresh === "live" ? "live" : "recent"}`)}
+                    <Badge
+                      tone={fresh === "live" ? "ok" : fresh === "recent" ? "primary" : "warn"}
+                      className="mt-1"
+                    >
+                      {t(
+                        `ui.${fresh === "stale" ? "stale" : fresh === "live" ? "live" : "recent"}`,
+                      )}
                     </Badge>
                   </div>
                   <div className="text-end">
-                    <p className="font-display font-semibold tabular-nums ltr-isolate">{dh(o.price)}</p>
-                    {isLow && <p className="text-[11px] font-semibold text-primary">{t("ui.lowest")}</p>}
+                    <p className="font-display font-semibold tabular-nums ltr-isolate">
+                      {dh(o.price)}
+                    </p>
+                    {isLow && (
+                      <p className="text-[11px] font-semibold text-primary">{t("ui.lowest")}</p>
+                    )}
                     <p className="text-[11px] text-muted">
                       {o.stock === "unknown"
                         ? t("ui.availability.unknown")
-                        : t(`ui.stock.${o.stock.replace("in_stock", "in").replace("low_stock", "low").replace("out_of_stock", "out")}`)}
+                        : t(
+                            `ui.stock.${o.stock.replace("in_stock", "in").replace("low_stock", "low").replace("out_of_stock", "out")}`,
+                          )}
                     </p>
                   </div>
                   <a
@@ -200,12 +242,16 @@ function ProductPage() {
       <div className="mx-auto grid max-w-6xl gap-4 px-4 pb-8 sm:gap-6 lg:grid-cols-3">
         <Card className="rounded-2xl p-5">
           <h2 className="mb-3 font-display text-lg font-semibold">{t("product.specSheet")}</h2>
-          {Object.entries(p.specs).filter(([key, value]) => key.trim() && value.trim()).length > 0 ? (
+          {Object.entries(p.specs).filter(([key, value]) => key.trim() && value.trim()).length >
+          0 ? (
             <dl className="divide-y divide-border text-sm">
               {Object.entries(p.specs)
                 .filter(([key, value]) => key.trim() && value.trim())
                 .map(([key, value]) => (
-                  <div key={key} className="grid grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-3 py-2.5">
+                  <div
+                    key={key}
+                    className="grid grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-3 py-2.5"
+                  >
                     <dt className="break-words font-medium text-muted">{key}</dt>
                     <dd className="break-words text-end ltr-isolate">{value}</dd>
                   </div>

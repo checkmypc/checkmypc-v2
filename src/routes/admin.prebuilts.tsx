@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SelectInput } from "@/components/ui/select-input";
 import { BUILDER_SLOTS, categoryLabel, productsByCategory } from "@/lib/catalog";
 import { useOps } from "@/lib/ops";
 import { CITIES } from "@/lib/services";
@@ -27,7 +28,9 @@ function AdminPrebuilts() {
       <div>
         <div className="mb-4 flex items-end justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">Ready-made</p>
+            <p className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">
+              Ready-made
+            </p>
             <h1 className="font-display text-3xl font-semibold">Prebuilt PCs</h1>
           </div>
           <Button size="sm" onClick={() => setSel("new")}>
@@ -113,46 +116,62 @@ function RecipeEditor({
       <div className="grid gap-3">
         <div>
           <Label>Title</Label>
-          <Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
+          <Input
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+          />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Store</Label>
-            <Input value={form.store} onChange={(e) => setForm((f) => ({ ...f, store: e.target.value }))} />
+            <Input
+              value={form.store}
+              onChange={(e) => setForm((f) => ({ ...f, store: e.target.value }))}
+            />
           </div>
           <div>
             <Label>City</Label>
-            <select className={fieldClass} value={form.city} onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}>
+            <SelectInput
+              className={fieldClass}
+              value={form.city}
+              onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+            >
               {CITIES.map((c) => (
                 <option key={c}>{c}</option>
               ))}
               <option>Marrakech</option>
               <option>Tanger</option>
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div>
           <Label>Condition</Label>
-          <select
+          <SelectInput
             className={fieldClass}
             value={form.condition}
-            onChange={(e) => setForm((f) => ({ ...f, condition: e.target.value as "new" | "used" }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, condition: e.target.value as "new" | "used" }))
+            }
           >
             <option value="new">New</option>
             <option value="used">Used</option>
-          </select>
+          </SelectInput>
         </div>
         {BUILDER_SLOTS.map((cat) => (
           <div key={cat}>
             <Label>{categoryLabel(cat)}</Label>
-            <select className={fieldClass} value={partFor(cat)} onChange={(e) => setPart(cat, e.target.value)}>
+            <SelectInput
+              className={fieldClass}
+              value={partFor(cat)}
+              onChange={(e) => setPart(cat, e.target.value)}
+            >
               <option value="">—</option>
               {productsByCategory(cat).map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name} · {p.best_price} DH
                 </option>
               ))}
-            </select>
+            </SelectInput>
           </div>
         ))}
         <div className="flex flex-wrap gap-2">

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SelectInput } from "@/components/ui/select-input";
 import { Textarea } from "@/components/ui/textarea";
 import { CITIES } from "@/lib/services";
 import { emptyListing, emptyReport, useOps } from "@/lib/ops";
@@ -38,7 +39,9 @@ function AdminUsed() {
             onClick={() => setTab(t)}
             className={cn(
               "min-h-11 rounded-full px-4 text-sm font-semibold capitalize",
-              tab === t ? "bg-primary text-primary-fg" : "bg-surface text-muted shadow-[var(--shadow-border)]",
+              tab === t
+                ? "bg-primary text-primary-fg"
+                : "bg-surface text-muted shadow-[var(--shadow-border)]",
             )}
           >
             {t}
@@ -133,11 +136,15 @@ function ListingEditor({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>City</Label>
-            <select className={fieldClass} value={form.city} onChange={(e) => set("city", e.target.value)}>
+            <SelectInput
+              className={fieldClass}
+              value={form.city}
+              onChange={(e) => set("city", e.target.value)}
+            >
               {CITIES.map((c) => (
                 <option key={c}>{c}</option>
               ))}
-            </select>
+            </SelectInput>
           </div>
           <div>
             <Label>Condition</Label>
@@ -147,11 +154,19 @@ function ListingEditor({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Asking DH</Label>
-            <Input type="number" value={form.asking} onChange={(e) => set("asking", Number(e.target.value))} />
+            <Input
+              type="number"
+              value={form.asking}
+              onChange={(e) => set("asking", Number(e.target.value))}
+            />
           </div>
           <div>
             <Label>Fair value DH</Label>
-            <Input type="number" value={form.fairValue} onChange={(e) => set("fairValue", Number(e.target.value))} />
+            <Input
+              type="number"
+              value={form.fairValue}
+              onChange={(e) => set("fairValue", Number(e.target.value))}
+            />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -173,13 +188,17 @@ function ListingEditor({
           </div>
         </div>
         <label className="flex min-h-11 items-center gap-2 text-sm">
-          <input type="checkbox" checked={form.inspected} onChange={(e) => set("inspected", e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={form.inspected}
+            onChange={(e) => set("inspected", e.target.checked)}
+          />
           Inspected
         </label>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Verdict</Label>
-            <select
+            <SelectInput
               className={fieldClass}
               value={form.verdict ?? ""}
               onChange={(e) => set("verdict", (e.target.value || undefined) as Verdict | undefined)}
@@ -188,15 +207,19 @@ function ListingEditor({
               <option value="BUY">BUY</option>
               <option value="NEGOTIATE">NEGOTIATE</option>
               <option value="DONT">DON'T BUY</option>
-            </select>
+            </SelectInput>
           </div>
           <div>
             <Label>Risk</Label>
-            <select className={fieldClass} value={form.risk} onChange={(e) => set("risk", e.target.value as UsedListing["risk"])}>
+            <SelectInput
+              className={fieldClass}
+              value={form.risk}
+              onChange={(e) => set("risk", e.target.value as UsedListing["risk"])}
+            >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div>
@@ -307,7 +330,7 @@ function ReportEditor({
         </div>
         <div>
           <Label>Linked listing</Label>
-          <select
+          <SelectInput
             className={fieldClass}
             value={form.listingId ?? ""}
             onChange={(e) => {
@@ -329,7 +352,7 @@ function ReportEditor({
                 {l.title}
               </option>
             ))}
-          </select>
+          </SelectInput>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -338,16 +361,24 @@ function ReportEditor({
           </div>
           <div>
             <Label>City</Label>
-            <select className={fieldClass} value={form.city} onChange={(e) => set("city", e.target.value)}>
+            <SelectInput
+              className={fieldClass}
+              value={form.city}
+              onChange={(e) => set("city", e.target.value)}
+            >
               {CITIES.map((c) => (
                 <option key={c}>{c}</option>
               ))}
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div>
           <Label>Technician</Label>
-          <Input list="tech-names" value={form.technician} onChange={(e) => set("technician", e.target.value)} />
+          <Input
+            list="tech-names"
+            value={form.technician}
+            onChange={(e) => set("technician", e.target.value)}
+          />
           <datalist id="tech-names">
             {techs.map((t) => (
               <option key={t} value={t} />
@@ -357,15 +388,19 @@ function ReportEditor({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Verdict</Label>
-            <select className={fieldClass} value={form.verdict} onChange={(e) => set("verdict", e.target.value as Verdict)}>
+            <SelectInput
+              className={fieldClass}
+              value={form.verdict}
+              onChange={(e) => set("verdict", e.target.value as Verdict)}
+            >
               <option value="BUY">BUY</option>
               <option value="NEGOTIATE">NEGOTIATE</option>
               <option value="DONT">DON'T BUY</option>
-            </select>
+            </SelectInput>
           </div>
           <div>
             <Label>Risk</Label>
-            <select
+            <SelectInput
               className={fieldClass}
               value={form.risk}
               onChange={(e) => set("risk", e.target.value as InspectionReport["risk"])}
@@ -373,21 +408,33 @@ function ReportEditor({
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <div>
             <Label>Asking</Label>
-            <Input type="number" value={form.asking} onChange={(e) => set("asking", Number(e.target.value))} />
+            <Input
+              type="number"
+              value={form.asking}
+              onChange={(e) => set("asking", Number(e.target.value))}
+            />
           </div>
           <div>
             <Label>Fair</Label>
-            <Input type="number" value={form.fairValue} onChange={(e) => set("fairValue", Number(e.target.value))} />
+            <Input
+              type="number"
+              value={form.fairValue}
+              onChange={(e) => set("fairValue", Number(e.target.value))}
+            />
           </div>
           <div>
             <Label>Offer</Label>
-            <Input type="number" value={form.suggestOffer} onChange={(e) => set("suggestOffer", Number(e.target.value))} />
+            <Input
+              type="number"
+              value={form.suggestOffer}
+              onChange={(e) => set("suggestOffer", Number(e.target.value))}
+            />
           </div>
         </div>
         <div>
@@ -401,7 +448,13 @@ function ReportEditor({
                     value={cell}
                     onChange={(e) => {
                       const hardware = form.hardware.map((r, ri) =>
-                        ri === i ? ([...r.slice(0, j), e.target.value, ...r.slice(j + 1)] as [string, string, string]) : r,
+                        ri === i
+                          ? ([...r.slice(0, j), e.target.value, ...r.slice(j + 1)] as [
+                              string,
+                              string,
+                              string,
+                            ])
+                          : r,
                       );
                       set("hardware", hardware);
                     }}
@@ -432,10 +485,17 @@ function ReportEditor({
         </div>
         <div>
           <Label>Issues (one per line)</Label>
-          <Textarea value={form.issues.join("\n")} onChange={(e) => set("issues", e.target.value.split("\n"))} />
+          <Textarea
+            value={form.issues.join("\n")}
+            onChange={(e) => set("issues", e.target.value.split("\n"))}
+          />
         </div>
         <label className="flex min-h-11 items-center gap-2 text-sm">
-          <input type="checkbox" checked={form.published} onChange={(e) => set("published", e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={form.published}
+            onChange={(e) => set("published", e.target.checked)}
+          />
           Publish on the public report URL
         </label>
         <div className="flex flex-wrap gap-2">

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { PageHero } from "@/components/page-hero";
 import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
+import { SelectInput } from "@/components/ui/select-input";
 import {
   CATEGORY_ORDER,
   categoryLabel,
@@ -36,12 +37,17 @@ export function ProductsPage() {
     () => (liveProducts ? includeManifestComponents(liveProducts) : allProducts()),
     [liveProducts],
   );
-  const { products, loading: photosLoading, error: photosError } = useProductsWithPhotos(sourceProducts);
+  const {
+    products,
+    loading: photosLoading,
+    error: photosError,
+  } = useProductsWithPhotos(sourceProducts);
   const [budget, setBudget] = useState(8000);
   const [brand, setBrand] = useState("");
   const [sort, setSort] = useState("price-asc");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const activeFilters = Number(Boolean(category)) + Number(Boolean(brand)) + Number(budget < 8000) + Number(Boolean(q));
+  const activeFilters =
+    Number(Boolean(category)) + Number(Boolean(brand)) + Number(budget < 8000) + Number(Boolean(q));
 
   function clearCategory() {
     void navigate({ to: "/products", search: q ? { q } : {} });
@@ -62,9 +68,7 @@ export function ProductsPage() {
 
   const brands = useMemo(() => {
     const set = new Set(
-      products
-        .filter((p) => !category || p.category === category)
-        .map((p) => p.brand),
+      products.filter((p) => !category || p.category === category).map((p) => p.brand),
     );
     return [...set].sort();
   }, [category, products]);
@@ -90,7 +94,9 @@ export function ProductsPage() {
 
   const sidebar = (
     <aside className="rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
-      <h3 className="mb-3 text-xs font-semibold tracking-wider text-muted uppercase">{t("ui.category")}</h3>
+      <h3 className="mb-3 text-xs font-semibold tracking-wider text-muted uppercase">
+        {t("ui.category")}
+      </h3>
       <div className="mb-5 flex flex-col gap-1">
         <Link
           to="/products"
@@ -112,8 +118,12 @@ export function ProductsPage() {
           </Link>
         ))}
       </div>
-      <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">{t("ui.budget")}</h3>
-      <p className="mb-1 font-display text-sm font-semibold tabular-nums text-primary ltr-isolate">{budget.toLocaleString("fr-MA")} DH</p>
+      <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">
+        {t("ui.budget")}
+      </h3>
+      <p className="mb-1 font-display text-sm font-semibold tabular-nums text-primary ltr-isolate">
+        {budget.toLocaleString("fr-MA")} DH
+      </p>
       <input
         type="range"
         min={300}
@@ -123,10 +133,12 @@ export function ProductsPage() {
         onChange={(e) => setBudget(Number(e.target.value))}
         onPointerUp={closeMobileFilters}
         onKeyUp={closeMobileFilters}
-        className="mb-5 w-full accent-[var(--primary)]"
+        className="range-control mb-5"
       />
-      <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">{t("ui.brand")}</h3>
-      <select
+      <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">
+        {t("ui.brand")}
+      </h3>
+      <SelectInput
         className="h-11 w-full rounded-md bg-bg px-2 text-sm shadow-[var(--shadow-border)]"
         value={brand}
         onChange={(e) => {
@@ -138,7 +150,7 @@ export function ProductsPage() {
         {brands.map((b) => (
           <option key={b}>{b}</option>
         ))}
-      </select>
+      </SelectInput>
     </aside>
   );
 
@@ -158,54 +170,66 @@ export function ProductsPage() {
             aria-expanded={filtersOpen}
             aria-controls="mobile-component-filters"
           >
-            {t("ui.filters")}{activeFilters > 0 ? ` · ${activeFilters}` : ""}
+            {t("ui.filters")}
+            {activeFilters > 0 ? ` · ${activeFilters}` : ""}
           </Button>
-          {filtersOpen && <div id="mobile-component-filters" className="mt-3">{sidebar}</div>}
+          {filtersOpen && (
+            <div id="mobile-component-filters" className="mt-3">
+              {sidebar}
+            </div>
+          )}
         </div>
         <div className="hidden lg:block">{sidebar}</div>
         <section>
-            {activeFilters > 0 && (
-              <div className="mb-4 flex flex-wrap items-center gap-2" aria-label={t("ui.activeFilters")}>
-                {category && (
-                  <button type="button" className="filter-chip" onClick={clearCategory}>
-                    {categoryLabel(category)} <X className="size-3.5" aria-hidden="true" />
-                    <span className="sr-only">{t("ui.removeFilter")}</span>
-                  </button>
-                )}
-                {brand && (
-                  <button type="button" className="filter-chip" onClick={() => setBrand("")}>
-                    {brand} <X className="size-3.5" aria-hidden="true" />
-                    <span className="sr-only">{t("ui.removeFilter")}</span>
-                  </button>
-                )}
-                {budget < 8000 && (
-                  <button type="button" className="filter-chip" onClick={() => setBudget(8000)}>
-                    {t("ui.maxPrice")}: {budget.toLocaleString("fr-MA")} DH
-                    <X className="size-3.5" aria-hidden="true" />
-                    <span className="sr-only">{t("ui.removeFilter")}</span>
-                  </button>
-                )}
-                {q && (
-                  <button type="button" className="filter-chip" onClick={() => void navigate({ to: "/products", search: {} })}>
-                    {t("ui.search")}: {q}
-                    <X className="size-3.5" aria-hidden="true" />
-                    <span className="sr-only">{t("ui.removeFilter")}</span>
-                  </button>
-                )}
+          {activeFilters > 0 && (
+            <div
+              className="mb-4 flex flex-wrap items-center gap-2"
+              aria-label={t("ui.activeFilters")}
+            >
+              {category && (
+                <button type="button" className="filter-chip" onClick={clearCategory}>
+                  {categoryLabel(category)} <X className="size-3.5" aria-hidden="true" />
+                  <span className="sr-only">{t("ui.removeFilter")}</span>
+                </button>
+              )}
+              {brand && (
+                <button type="button" className="filter-chip" onClick={() => setBrand("")}>
+                  {brand} <X className="size-3.5" aria-hidden="true" />
+                  <span className="sr-only">{t("ui.removeFilter")}</span>
+                </button>
+              )}
+              {budget < 8000 && (
+                <button type="button" className="filter-chip" onClick={() => setBudget(8000)}>
+                  {t("ui.maxPrice")}: {budget.toLocaleString("fr-MA")} DH
+                  <X className="size-3.5" aria-hidden="true" />
+                  <span className="sr-only">{t("ui.removeFilter")}</span>
+                </button>
+              )}
+              {q && (
                 <button
                   type="button"
-                  className="min-h-9 rounded-full px-2 text-xs font-semibold text-muted underline-offset-4 hover:text-fg hover:underline"
-                  onClick={clearAllFilters}
+                  className="filter-chip"
+                  onClick={() => void navigate({ to: "/products", search: {} })}
                 >
-                  {t("ui.clearFilters")}
+                  {t("ui.search")}: {q}
+                  <X className="size-3.5" aria-hidden="true" />
+                  <span className="sr-only">{t("ui.removeFilter")}</span>
                 </button>
-              </div>
-            )}
-            <div className="mb-3 flex items-center justify-between gap-3">
+              )}
+              <button
+                type="button"
+                className="min-h-9 rounded-full px-2 text-xs font-semibold text-muted underline-offset-4 hover:text-fg hover:underline"
+                onClick={clearAllFilters}
+              >
+                {t("ui.clearFilters")}
+              </button>
+            </div>
+          )}
+          <div className="mb-3 flex items-center justify-between gap-3">
             <strong className="text-sm">
               {rows.length} {t("ui.results")}
             </strong>
-            <select
+            <SelectInput
               className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]"
               value={sort}
               onChange={(e) => setSort(e.target.value)}
@@ -214,15 +238,21 @@ export function ProductsPage() {
               <option value="price-desc">{t("ui.sort.priceDesc")}</option>
               <option value="stores">{t("ui.sort.stores")}</option>
               <option value="name">{t("ui.sort.name")}</option>
-            </select>
+            </SelectInput>
           </div>
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:gap-4 2xl:grid-cols-3">
             {photosLoading ? (
-              <p className="col-span-full rounded-xl bg-surface p-8 text-center text-sm text-muted shadow-[var(--shadow-border)]" role="status">
+              <p
+                className="col-span-full rounded-xl bg-surface p-8 text-center text-sm text-muted shadow-[var(--shadow-border)]"
+                role="status"
+              >
                 Loading component photos…
               </p>
             ) : photosError ? (
-              <p className="col-span-full rounded-xl bg-surface p-8 text-center text-sm text-muted shadow-[var(--shadow-border)]" role="alert">
+              <p
+                className="col-span-full rounded-xl bg-surface p-8 text-center text-sm text-muted shadow-[var(--shadow-border)]"
+                role="alert"
+              >
                 Component photos could not be loaded. Please try again.
               </p>
             ) : rows.length === 0 ? (

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SelectInput } from "@/components/ui/select-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ProductAvailability } from "@/components/product-availability";
 import { catalog, CATEGORY_ORDER, categoryImage, categoryLabel } from "@/lib/catalog";
@@ -30,7 +31,8 @@ function AdminCatalog() {
   const rows = useMemo(() => {
     return products.filter((p) => {
       if (cat !== "all" && p.category !== cat) return false;
-      if (q && !`${p.name} ${p.brand} ${p.id}`.toLowerCase().includes(q.toLowerCase())) return false;
+      if (q && !`${p.name} ${p.brand} ${p.id}`.toLowerCase().includes(q.toLowerCase()))
+        return false;
       return true;
     });
   }, [products, cat, q]);
@@ -69,7 +71,9 @@ function AdminCatalog() {
           onClick={() => setCat("all")}
           className={cn(
             "min-h-9 rounded-full px-3 text-xs font-semibold",
-            cat === "all" ? "bg-primary text-primary-fg" : "bg-surface text-muted shadow-[var(--shadow-border)]",
+            cat === "all"
+              ? "bg-primary text-primary-fg"
+              : "bg-surface text-muted shadow-[var(--shadow-border)]",
           )}
         >
           All
@@ -81,21 +85,30 @@ function AdminCatalog() {
             onClick={() => setCat(slug)}
             className={cn(
               "min-h-9 rounded-full px-3 text-xs font-semibold",
-              cat === slug ? "bg-primary text-primary-fg" : "bg-surface text-muted shadow-[var(--shadow-border)]",
+              cat === slug
+                ? "bg-primary text-primary-fg"
+                : "bg-surface text-muted shadow-[var(--shadow-border)]",
             )}
           >
             {categoryLabel(slug)}
           </button>
         ))}
       </div>
-      <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search SKU…" className="mb-4 max-w-md" />
+      <Input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search SKU…"
+        className="mb-4 max-w-md"
+      />
 
       {sel && (
         <div className="mb-4">
           <ProductEditor
-            key={sel === "new" ? "new" : current?.id ?? "x"}
+            key={sel === "new" ? "new" : (current?.id ?? "x")}
             product={
-              sel === "new" ? emptyProduct(cat === "all" ? "gpu" : cat) : (current ?? emptyProduct("gpu"))
+              sel === "new"
+                ? emptyProduct(cat === "all" ? "gpu" : cat)
+                : (current ?? emptyProduct("gpu"))
             }
             isNew={sel === "new"}
             onSave={async (p) => {
@@ -104,7 +117,9 @@ function AdminCatalog() {
                 setSel(p.id);
                 toast.success("SKU saved");
               } catch (error) {
-                toast.error(error instanceof Error ? error.message : "Could not save SKU. Please try again.");
+                toast.error(
+                  error instanceof Error ? error.message : "Could not save SKU. Please try again.",
+                );
               }
             }}
             onCancel={() => setSel(null)}
@@ -125,8 +140,16 @@ function AdminCatalog() {
         {rows.map((p) => (
           <Card key={p.id} className="rounded-xl p-3">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <button type="button" className="flex min-w-0 items-center gap-3 text-start" onClick={() => setSel(p.id)}>
-                <img src={p.image || categoryImage(p.category)} alt="" className="part-art size-12 shrink-0 object-contain" />
+              <button
+                type="button"
+                className="flex min-w-0 items-center gap-3 text-start"
+                onClick={() => setSel(p.id)}
+              >
+                <img
+                  src={p.image || categoryImage(p.category)}
+                  alt=""
+                  className="part-art size-12 shrink-0 object-contain"
+                />
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-medium">{p.name}</span>
                   <span className="block truncate text-xs text-muted">
@@ -138,7 +161,7 @@ function AdminCatalog() {
                 Edit
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid min-w-0 grid-cols-2 gap-2">
               {[
                 ["Best", p.best_price, "best_price"],
                 ["MSRP", p.msrp, "msrp"],
@@ -160,12 +183,14 @@ function AdminCatalog() {
                   />
                 </label>
               ))}
-              <div className="flex items-end justify-between gap-2">
-                <div className="pb-1">
+              <div className="col-span-2 flex min-w-0 flex-wrap items-end justify-between gap-2">
+                <div className="min-w-0 pb-1">
                   <p className="mb-1 text-[10px] text-muted">Availability by offers</p>
                   <ProductAvailability product={p} className="text-[10px]" />
                 </div>
-                <span className="pb-2 text-xs text-muted">{p.store_count} stores</span>
+                <span className="whitespace-nowrap pb-2 text-xs text-muted">
+                  {p.store_count} stores
+                </span>
               </div>
             </div>
           </Card>
@@ -187,8 +212,16 @@ function AdminCatalog() {
             {rows.map((p) => (
               <tr key={p.id} className="border-b border-border last:border-0 hover:bg-surface-2">
                 <td className="px-4 py-2">
-                  <button type="button" className="flex items-center gap-3 text-start" onClick={() => setSel(p.id)}>
-                    <img src={p.image || categoryImage(p.category)} alt="" className="part-art size-10 object-contain" />
+                  <button
+                    type="button"
+                    className="flex items-center gap-3 text-start"
+                    onClick={() => setSel(p.id)}
+                  >
+                    <img
+                      src={p.image || categoryImage(p.category)}
+                      alt=""
+                      className="part-art size-10 object-contain"
+                    />
                     <span>
                       <span className="block font-medium">{p.name}</span>
                       <span className="text-xs text-muted">
@@ -272,7 +305,9 @@ function ProductEditor({
   return (
     <Card className="rounded-2xl p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="font-display text-lg font-semibold">{isNew ? "New SKU" : form.name || "Edit SKU"}</h2>
+        <h2 className="font-display text-lg font-semibold">
+          {isNew ? "New SKU" : form.name || "Edit SKU"}
+        </h2>
         <Button variant="ghost" size="sm" onClick={onCancel}>
           Close
         </Button>
@@ -288,7 +323,7 @@ function ProductEditor({
         </div>
         <div>
           <Label htmlFor="p-cat">Category</Label>
-          <select
+          <SelectInput
             id="p-cat"
             className={fieldClass}
             value={form.category}
@@ -299,19 +334,34 @@ function ProductEditor({
                 {categoryLabel(c)}
               </option>
             ))}
-          </select>
+          </SelectInput>
         </div>
         <div>
           <Label htmlFor="p-msrp">MSRP DH</Label>
-          <Input id="p-msrp" type="number" value={form.msrp} onChange={(e) => set("msrp", Number(e.target.value))} />
+          <Input
+            id="p-msrp"
+            type="number"
+            value={form.msrp}
+            onChange={(e) => set("msrp", Number(e.target.value))}
+          />
         </div>
         <div>
           <Label htmlFor="p-used">Used DH</Label>
-          <Input id="p-used" type="number" value={form.used_price} onChange={(e) => set("used_price", Number(e.target.value))} />
+          <Input
+            id="p-used"
+            type="number"
+            value={form.used_price}
+            onChange={(e) => set("used_price", Number(e.target.value))}
+          />
         </div>
         <div>
           <Label htmlFor="p-power">Power draw W</Label>
-          <Input id="p-power" type="number" value={form.power_draw} onChange={(e) => set("power_draw", Number(e.target.value))} />
+          <Input
+            id="p-power"
+            type="number"
+            value={form.power_draw}
+            onChange={(e) => set("power_draw", Number(e.target.value))}
+          />
         </div>
         <div className="sm:col-span-2">
           <Label htmlFor="p-description">Description</Label>
@@ -327,7 +377,11 @@ function ProductEditor({
         <Label htmlFor="p-img">Primary product photo</Label>
         <div className="mt-1 flex flex-wrap items-center gap-3">
           {form.image && (
-            <img src={form.image} alt="" className="part-art size-16 rounded-lg bg-surface-2 object-contain p-2" />
+            <img
+              src={form.image}
+              alt=""
+              className="part-art size-16 rounded-lg bg-surface-2 object-contain p-2"
+            />
           )}
           <Input
             id="p-img"
@@ -362,7 +416,11 @@ function ProductEditor({
           <div className="mt-3 flex flex-wrap gap-2">
             {form.images.map((image) => (
               <div key={image} className="relative">
-                <img src={image} alt="" className="part-art size-16 rounded-lg bg-surface-2 object-contain p-2" />
+                <img
+                  src={image}
+                  alt=""
+                  className="part-art size-16 rounded-lg bg-surface-2 object-contain p-2"
+                />
                 <button
                   type="button"
                   className="absolute -end-1 -top-1 grid size-6 place-items-center rounded-full bg-danger text-xs text-white"
@@ -383,7 +441,9 @@ function ProductEditor({
       </div>
       <div className="mt-5">
         <div className="mb-2 flex items-center justify-between gap-3">
-          <h3 className="text-xs font-semibold tracking-wider text-muted uppercase">Component details</h3>
+          <h3 className="text-xs font-semibold tracking-wider text-muted uppercase">
+            Component details
+          </h3>
           <Button
             type="button"
             variant="secondary"
@@ -412,20 +472,29 @@ function ProductEditor({
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => setSpecRows((rows) => rows.filter((_, rowIndex) => rowIndex !== index))}
+                onClick={() =>
+                  setSpecRows((rows) => rows.filter((_, rowIndex) => rowIndex !== index))
+                }
               >
                 Remove
               </Button>
             </div>
           ))}
-          {specRows.length === 0 && <p className="text-xs text-muted">No component details added yet.</p>}
+          {specRows.length === 0 && (
+            <p className="text-xs text-muted">No component details added yet.</p>
+          )}
         </div>
       </div>
-      <h3 className="mt-5 mb-2 text-xs font-semibold tracking-wider text-muted uppercase">Store offers</h3>
+      <h3 className="mt-5 mb-2 text-xs font-semibold tracking-wider text-muted uppercase">
+        Store offers
+      </h3>
       <div className="space-y-3">
         {form.offers.map((o, i) => (
-          <div key={`${o.store}-${i}`} className="grid gap-2 rounded-xl bg-surface-2 p-3 sm:grid-cols-5">
-            <select
+          <div
+            key={`${o.store}-${i}`}
+            className="grid gap-2 rounded-xl bg-surface-2 p-3 sm:grid-cols-5"
+          >
+            <SelectInput
               className={fieldClass}
               value={o.store}
               onChange={(e) => {
@@ -437,9 +506,13 @@ function ProductEditor({
                 <option key={s.name}>{s.name}</option>
               ))}
               {!catalog.stores.some((s) => s.name === o.store) && <option>{o.store}</option>}
-            </select>
-            <Input type="number" value={o.price} onChange={(e) => setOffer(i, { price: Number(e.target.value) })} />
-            <select
+            </SelectInput>
+            <Input
+              type="number"
+              value={o.price}
+              onChange={(e) => setOffer(i, { price: Number(e.target.value) })}
+            />
+            <SelectInput
               className={fieldClass}
               value={o.stock}
               aria-label={`${o.store} availability`}
@@ -450,20 +523,32 @@ function ProductEditor({
                   {s === "unknown" ? "Availability unknown" : s.replaceAll("_", " ")}
                 </option>
               ))}
-            </select>
-            <Input value={o.url} onChange={(e) => setOffer(i, { url: e.target.value })} placeholder="https://" />
+            </SelectInput>
+            <Input
+              value={o.url}
+              onChange={(e) => setOffer(i, { url: e.target.value })}
+              placeholder="https://"
+            />
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => setForm((f) => ({ ...f, offers: f.offers.filter((_, idx) => idx !== i) }))}
+              onClick={() =>
+                setForm((f) => ({ ...f, offers: f.offers.filter((_, idx) => idx !== i) }))
+              }
             >
               Remove
             </Button>
           </div>
         ))}
       </div>
-      <Button type="button" variant="secondary" size="sm" className="mt-3" onClick={() => setForm((f) => ({ ...f, offers: [...f.offers, emptyOffer()] }))}>
+      <Button
+        type="button"
+        variant="secondary"
+        size="sm"
+        className="mt-3"
+        onClick={() => setForm((f) => ({ ...f, offers: [...f.offers, emptyOffer()] }))}
+      >
         Add offer
       </Button>
       <div className="mt-5 flex flex-wrap gap-2">
@@ -489,7 +574,12 @@ function ProductEditor({
               specs[name] = value;
             }
             setSaving(true);
-            void onSave({ ...form, name: form.name.trim(), brand: form.brand.trim(), specs }).finally(() => {
+            void onSave({
+              ...form,
+              name: form.name.trim(),
+              brand: form.brand.trim(),
+              specs,
+            }).finally(() => {
               setSaving(false);
             });
           }}

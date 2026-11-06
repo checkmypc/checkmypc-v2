@@ -5,6 +5,7 @@ import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SelectInput } from "@/components/ui/select-input";
 import { allProducts, BUILDER_SLOTS, categoryLabel, useProductsWithPhotos } from "@/lib/catalog";
 import { buildItems, buildTotal, compatibility, decodeBuild, encodeBuild } from "@/lib/builder";
 import { useI18n } from "@/lib/i18n";
@@ -52,7 +53,11 @@ function BuilderPage() {
 
   return (
     <main>
-      <PageHero eyebrow={t("nav.builder")} title={t("hero.builder")} description={t("ui.pickParts")} />
+      <PageHero
+        eyebrow={t("nav.builder")}
+        title={t("hero.builder")}
+        description={t("ui.pickParts")}
+      />
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1.25fr_.75fr]">
         <Card className="rounded-2xl p-2 sm:p-4">
           {BUILDER_SLOTS.map((slot) => {
@@ -66,7 +71,7 @@ function BuilderPage() {
                 <label className="text-sm font-medium" htmlFor={`slot-${slot}`}>
                   {categoryLabel(slot)}
                 </label>
-                <select
+                <SelectInput
                   id={`slot-${slot}`}
                   className="h-11 w-full rounded-md bg-bg px-2 text-sm shadow-[var(--shadow-border)]"
                   value={selected}
@@ -81,8 +86,12 @@ function BuilderPage() {
                       {p.name} — {p.offers.length > 0 ? dh(p.best_price) : t("ui.priceUnavailable")}
                     </option>
                   ))}
-                </select>
-                <Link to="/products" search={{ category: slot }} className="text-sm font-medium text-primary">
+                </SelectInput>
+                <Link
+                  to="/products"
+                  search={{ category: slot }}
+                  className="text-sm font-medium text-primary"
+                >
                   {t("ui.browse")}
                 </Link>
               </div>
@@ -97,8 +106,12 @@ function BuilderPage() {
         </Card>
         <aside className="h-max lg:sticky lg:top-24">
           <Card className="rounded-2xl p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted uppercase">{t("ui.total")}</p>
-            <p className="font-display text-3xl font-semibold tabular-nums ltr-isolate">{dh(total)}</p>
+            <p className="text-xs font-semibold tracking-wider text-muted uppercase">
+              {t("ui.total")}
+            </p>
+            <p className="font-display text-3xl font-semibold tabular-nums ltr-isolate">
+              {dh(total)}
+            </p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <div className="rounded-lg bg-surface-2 p-3">
                 <p className="text-[11px] text-muted">{t("ui.usedEst")}</p>
@@ -127,7 +140,11 @@ function BuilderPage() {
                 {c.checks.map((k) => (
                   <li key={k.title} className="flex items-start justify-between gap-2 text-sm">
                     <span>{k.title}</span>
-                    <Badge tone={k.level === "pass" ? "ok" : k.level === "warn" ? "warn" : "danger"}>{k.detail}</Badge>
+                    <Badge
+                      tone={k.level === "pass" ? "ok" : k.level === "warn" ? "warn" : "danger"}
+                    >
+                      {k.detail}
+                    </Badge>
                   </li>
                 ))}
               </ul>

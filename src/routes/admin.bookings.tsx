@@ -6,14 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SelectInput } from "@/components/ui/select-input";
 import { Textarea } from "@/components/ui/textarea";
 import { whatsappHref } from "@/lib/bookings";
-import {
-  KIND_LABEL,
-  STATUSES,
-  STATUS_LABEL,
-  useOps,
-} from "@/lib/ops";
+import { KIND_LABEL, STATUSES, STATUS_LABEL, useOps } from "@/lib/ops";
 import { ALL_PACKAGES, CITIES, livePackagePrice } from "@/lib/services";
 import type { Booking, BookingStatus, ServiceKind, Technician } from "@/lib/types";
 import { cn, dh, fieldClass } from "@/lib/utils";
@@ -42,9 +38,7 @@ function AdminBookings() {
   }, [bookings, filter, q]);
 
   const current =
-    sel === "new"
-      ? null
-      : rows.find((b) => b.id === sel) || bookings.find((b) => b.id === sel);
+    sel === "new" ? null : rows.find((b) => b.id === sel) || bookings.find((b) => b.id === sel);
 
   function save(b: Booking) {
     upsert(b);
@@ -53,8 +47,8 @@ function AdminBookings() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-4 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] lg:px-6">
-      <div>
+    <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-4 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] lg:px-6">
+      <div className="min-w-0">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">Pipeline</p>
@@ -65,21 +59,30 @@ function AdminBookings() {
           </Button>
         </div>
         <div className="mb-3 flex flex-wrap gap-2">
-          {(["all", "new", "confirmed", "scheduled", "in_progress", "done", "cancelled"] as const).map((k) => (
+          {(
+            ["all", "new", "confirmed", "scheduled", "in_progress", "done", "cancelled"] as const
+          ).map((k) => (
             <button
               key={k}
               type="button"
               onClick={() => setFilter(k)}
               className={cn(
                 "min-h-9 rounded-full px-3 text-xs font-semibold",
-                filter === k ? "bg-primary text-primary-fg" : "bg-surface text-muted shadow-[var(--shadow-border)]",
+                filter === k
+                  ? "bg-primary text-primary-fg"
+                  : "bg-surface text-muted shadow-[var(--shadow-border)]",
               )}
             >
               {k === "all" ? "All" : STATUS_LABEL[k]}
             </button>
           ))}
         </div>
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, phone, city…" className="mb-3" />
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search name, phone, city…"
+          className="mb-3"
+        />
         <div className="overflow-x-auto rounded-2xl bg-surface shadow-[var(--shadow-border)]">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="text-left text-xs text-muted">
@@ -127,8 +130,8 @@ function AdminBookings() {
         </div>
       </div>
       <BookingEditor
-        key={sel === "new" ? "new" : current?.id ?? "none"}
-        booking={sel === "new" ? null : current ?? null}
+        key={sel === "new" ? "new" : (current?.id ?? "none")}
+        booking={sel === "new" ? null : (current ?? null)}
         team={team}
         onSave={save}
         onPatch={patch}
@@ -181,8 +184,10 @@ function BookingEditor({
   );
 
   return (
-    <Card className="h-fit rounded-2xl p-5">
-      <h2 className="font-display text-lg font-semibold">{isNew ? "New request" : form.name || "Booking"}</h2>
+    <Card className="h-fit min-w-0 rounded-2xl p-5">
+      <h2 className="font-display text-lg font-semibold">
+        {isNew ? "New request" : form.name || "Booking"}
+      </h2>
       <p className="mb-4 font-mono text-xs text-muted">{form.id}</p>
       <div className="grid gap-3">
         <div>
@@ -192,22 +197,31 @@ function BookingEditor({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="bk-phone">Phone</Label>
-            <Input id="bk-phone" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
+            <Input
+              id="bk-phone"
+              value={form.phone}
+              onChange={(e) => set("phone", e.target.value)}
+            />
           </div>
           <div>
             <Label htmlFor="bk-city">City</Label>
-            <select id="bk-city" className={fieldClass} value={form.city} onChange={(e) => set("city", e.target.value)}>
+            <SelectInput
+              id="bk-city"
+              className={fieldClass}
+              value={form.city}
+              onChange={(e) => set("city", e.target.value)}
+            >
               {CITIES.map((c) => (
                 <option key={c}>{c}</option>
               ))}
               <option>Other</option>
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="bk-kind">Service</Label>
-            <select
+            <SelectInput
               id="bk-kind"
               className={fieldClass}
               value={form.kind}
@@ -218,11 +232,11 @@ function BookingEditor({
                   {KIND_LABEL[k]}
                 </option>
               ))}
-            </select>
+            </SelectInput>
           </div>
           <div>
             <Label htmlFor="bk-status">Status</Label>
-            <select
+            <SelectInput
               id="bk-status"
               className={fieldClass}
               value={form.status ?? "new"}
@@ -237,12 +251,12 @@ function BookingEditor({
                   {STATUS_LABEL[s]}
                 </option>
               ))}
-            </select>
+            </SelectInput>
           </div>
         </div>
         <div>
           <Label htmlFor="bk-pkg">Package</Label>
-          <select
+          <SelectInput
             id="bk-pkg"
             className={fieldClass}
             value={form.packageId ?? ""}
@@ -252,14 +266,16 @@ function BookingEditor({
               set("quotedPrice", livePackagePrice(packageId, form.quotedPrice || 0));
             }}
           >
-            {ALL_PACKAGES.filter((p) => p.id.startsWith(form.kind === "inspection" ? "inspect" : form.kind === "assembly" ? "asm" : "cln")).map(
-              (p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name} — {p.price} DH
-                </option>
+            {ALL_PACKAGES.filter((p) =>
+              p.id.startsWith(
+                form.kind === "inspection" ? "inspect" : form.kind === "assembly" ? "asm" : "cln",
               ),
-            )}
-          </select>
+            ).map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name} — {p.price} DH
+              </option>
+            ))}
+          </SelectInput>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -283,7 +299,7 @@ function BookingEditor({
         </div>
         <div>
           <Label htmlFor="bk-tech">Technician</Label>
-          <select
+          <SelectInput
             id="bk-tech"
             className={fieldClass}
             value={form.assignedTo ?? ""}
@@ -297,23 +313,40 @@ function BookingEditor({
                   {t.name} · {t.city}
                 </option>
               ))}
-          </select>
+          </SelectInput>
         </div>
         <div>
           <Label htmlFor="bk-when">Scheduled</Label>
-          <Input id="bk-when" type="date" value={form.scheduledAt ?? ""} onChange={(e) => set("scheduledAt", e.target.value)} />
+          <Input
+            id="bk-when"
+            type="date"
+            value={form.scheduledAt ?? ""}
+            onChange={(e) => set("scheduledAt", e.target.value)}
+          />
         </div>
         <div>
           <Label htmlFor="bk-url">Listing URL</Label>
-          <Input id="bk-url" value={form.listingUrl ?? ""} onChange={(e) => set("listingUrl", e.target.value)} />
+          <Input
+            id="bk-url"
+            value={form.listingUrl ?? ""}
+            onChange={(e) => set("listingUrl", e.target.value)}
+          />
         </div>
         <div>
           <Label htmlFor="bk-notes">Customer notes</Label>
-          <Textarea id="bk-notes" value={form.notes} onChange={(e) => set("notes", e.target.value)} />
+          <Textarea
+            id="bk-notes"
+            value={form.notes}
+            onChange={(e) => set("notes", e.target.value)}
+          />
         </div>
         <div>
           <Label htmlFor="bk-int">Internal notes</Label>
-          <Textarea id="bk-int" value={form.internalNotes ?? ""} onChange={(e) => set("internalNotes", e.target.value)} />
+          <Textarea
+            id="bk-int"
+            value={form.internalNotes ?? ""}
+            onChange={(e) => set("internalNotes", e.target.value)}
+          />
         </div>
         <div className="flex flex-wrap gap-2 pt-1">
           <Button type="button" onClick={() => onSave(form)}>

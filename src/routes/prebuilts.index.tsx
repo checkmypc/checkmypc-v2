@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { SelectInput } from "@/components/ui/select-input";
 import { useI18n } from "@/lib/i18n";
 import { BUDGET_BRACKETS, prebuilts } from "@/lib/prebuilts";
 import { useOps } from "@/lib/ops";
@@ -62,7 +63,9 @@ function PrebuiltsPage() {
               type="button"
               onClick={() => setBracket((cur) => (cur === b.id ? null : b.id))}
               className={`rounded-full px-3 py-2 text-sm ${
-                bracket === b.id ? "bg-primary text-primary-fg" : "bg-surface shadow-[var(--shadow-border)]"
+                bracket === b.id
+                  ? "bg-primary text-primary-fg"
+                  : "bg-surface shadow-[var(--shadow-border)]"
               }`}
             >
               {b.label}
@@ -70,27 +73,45 @@ function PrebuiltsPage() {
           ))}
         </div>
         <div className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <select className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]" value={store} onChange={(e) => setStore(e.target.value)}>
+          <SelectInput
+            className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]"
+            value={store}
+            onChange={(e) => setStore(e.target.value)}
+          >
             <option value="">Stores</option>
             {stores.map((s) => (
               <option key={s}>{s}</option>
             ))}
-          </select>
-          <select className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]" value={gpu} onChange={(e) => setGpu(e.target.value)}>
+          </SelectInput>
+          <SelectInput
+            className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]"
+            value={gpu}
+            onChange={(e) => setGpu(e.target.value)}
+          >
             <option value="">GPU</option>
             {gpus.map((s) => (
               <option key={s}>{s}</option>
             ))}
-          </select>
-          <select className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]" value={condition} onChange={(e) => setCondition(e.target.value)}>
-            <option value="">{t("ui.new")} & {t("ui.used")}</option>
+          </SelectInput>
+          <SelectInput
+            className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]"
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
+          >
+            <option value="">
+              {t("ui.new")} & {t("ui.used")}
+            </option>
             <option value="new">{t("ui.new")}</option>
             <option value="used">{t("ui.used")}</option>
-          </select>
-          <select className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]" value={sort} onChange={(e) => setSort(e.target.value)}>
+          </SelectInput>
+          <SelectInput
+            className="h-11 rounded-md bg-surface px-2 text-sm shadow-[var(--shadow-border)]"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+          >
             <option value="price-asc">{t("ui.sort.priceAsc")}</option>
             <option value="price-desc">{t("ui.sort.priceDesc")}</option>
-          </select>
+          </SelectInput>
         </div>
         <p className="mb-4 text-sm font-medium">
           {rows.length} {t("ui.systems")}
@@ -104,7 +125,10 @@ function PrebuiltsPage() {
                 <Card className="h-full rounded-2xl p-3 transition-[box-shadow] hover:shadow-[var(--shadow-border-hover)]">
                   <div className="relative grid h-40 place-items-center rounded-lg bg-surface-2">
                     <img src={b.image} alt="" className="part-art h-28 object-contain" />
-                    <Badge className="absolute start-2 top-2" tone={b.condition === "used" ? "warn" : "ok"}>
+                    <Badge
+                      className="absolute start-2 top-2"
+                      tone={b.condition === "used" ? "warn" : "ok"}
+                    >
                       {b.condition === "used" ? t("ui.used") : t("ui.new")}
                     </Badge>
                     <span className="absolute end-2 top-2 rounded-md bg-surface px-2 py-1 text-[11px] font-semibold">
@@ -117,7 +141,9 @@ function PrebuiltsPage() {
                     <br />
                     {b.gpu} · {b.ram}
                   </p>
-                  <p className="mt-2 font-display text-xl font-semibold tabular-nums ltr-isolate">{dh(b.price)}</p>
+                  <p className="mt-2 font-display text-xl font-semibold tabular-nums ltr-isolate">
+                    {dh(b.price)}
+                  </p>
                 </Card>
               </Link>
             ))}
