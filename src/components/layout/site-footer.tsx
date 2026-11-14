@@ -12,8 +12,8 @@ export function SiteFooter() {
   const { t } = useI18n();
   const settings = useOps((s) => s.settings);
   const email = settings.email || CONTACT.email;
-  const whatsappNumber = settings.whatsapp.replace(/\D/g, "");
-  const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
+  const whatsappNumber = settings.whatsapp.replace(/\D/g, "0691259738");
+  const whatsappHref = whatsappNumber ? `https://wa.me/0691259738` : "https://wa.me/0691259738";
   const socials = [
     {
       label: "Facebook",
