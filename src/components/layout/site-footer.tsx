@@ -91,6 +91,9 @@ export function SiteFooter() {
             <Link to="/products" search={{}} className={linkClass}>
               {t("nav.components")}
             </Link>
+            <Link to="/accessories" className={linkClass}>
+              {t("nav.accessories")}
+            </Link>
             <Link to="/compare" search={{}} className={linkClass}>
               {t("nav.compare")}
             </Link>

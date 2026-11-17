@@ -2,8 +2,10 @@ import { getSql, type Sql } from "@/lib/db";
 import { recomputeProduct } from "@/lib/catalog";
 import type {
   ActivityItem,
+  Accessory,
   Booking,
   BookingStatus,
+  AccessoryCategory,
   CategorySlug,
   Offer,
   OpsSettings,
@@ -33,6 +35,7 @@ export type AdminSnapshot = PublicSnapshot & {
 };
 
 type ProductRow = Record<string, unknown>;
+type AccessoryRow = Record<string, unknown>;
 type BookingRow = Record<string, unknown>;
 type ListingRow = Record<string, unknown>;
 type ReportRow = Record<string, unknown>;
@@ -60,6 +63,26 @@ function mapProduct(row: ProductRow): Product {
     offers: asJson<Offer[]>(row.offers, []),
     history: asJson<PricePoint[]>(row.history, []),
   });
+}
+
+function mapAccessory(row: AccessoryRow): Accessory {
+  return {
+    id: asString(row.id),
+    slug: asString(row.slug) || asString(row.id),
+    name: asString(row.name),
+    category: asString(row.category) as AccessoryCategory,
+    manufacturer: asString(row.manufacturer),
+    seller: asString(row.seller) || "CHECKMYPC",
+    sellerUrl: asString(row.seller_url) || undefined,
+    images: asJson<string[]>(row.images, []),
+    description: asString(row.description),
+    price: asInt(row.price),
+    material: asString(row.material),
+    color: asString(row.color),
+    stockQuantity: asInt(row.stock_quantity),
+    active: asBool(row.active),
+    specs: asJson<Record<string, string>>(row.specs, {}),
+  };
 }
 
 function mapBooking(row: BookingRow): Booking {
@@ -207,6 +230,102 @@ export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
     settings: mapSettings(settings[0]),
     team: team.map(mapTech),
   };
+}
+
+export async function loadAccessories(): Promise<Accessory[]> {
+  const sql = await sqlClient();
+  const rows = await sql<AccessoryRow>`
+    select * from accessories where active = true order by category, name
+  `;
+  return rows.map(mapAccessory);
+}
+
+export async function loadAdminAccessories(): Promise<Accessory[]> {
+  const sql = await sqlClient();
+  const rows = await sql<AccessoryRow>`select * from accessories order by category, name`;
+  return rows.map(mapAccessory);
+}
+
+export async function loadAccessory(id: string): Promise<Accessory | null> {
+  const sql = await sqlClient();
+  const rows = await sql<AccessoryRow>`
+    select * from accessories where (slug = ${id} or id = ${id}) and active = true limit 1
+  `;
+  return rows[0] ? mapAccessory(rows[0]) : null;
+}
+
+export async function upsertAccessory(accessory: Accessory, actor?: string): Promise<Accessory> {
+  const sql = await sqlClient();
+  const id = accessory.id.trim() || newId("accessory");
+  const baseSlug =
+    accessory.name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 80)
+      .replace(/-+$/g, "") || "accessory";
+  const existingSlugs = await sql<{ id: string }>`
+    select id from accessories where slug = ${baseSlug} and id <> ${id}
+  `;
+  const slug = existingSlugs.length > 0 ? `${baseSlug}-${id}` : baseSlug;
+  const next: Accessory = {
+    ...accessory,
+    id,
+    slug,
+    name: accessory.name.trim(),
+    manufacturer: accessory.manufacturer.trim(),
+    seller: accessory.seller.trim() || "CHECKMYPC",
+    sellerUrl: accessory.sellerUrl?.trim() || undefined,
+    images: [...new Set(accessory.images)],
+    description: accessory.description.trim(),
+    material: accessory.material.trim(),
+    color: accessory.color.trim(),
+    specs: Object.fromEntries(
+      Object.entries(accessory.specs)
+        .map(([key, value]) => [key.trim(), value.trim()])
+        .filter(([key, value]) => key && value),
+    ),
+  };
+  await sql.query(
+    `insert into accessories (
+      id, slug, name, category, manufacturer, seller, seller_url, images, description, price,
+      material, color, stock_quantity, active, specs, updated_at
+    ) values (
+      $1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9,$10,$11,$12,$13,$14,$15::jsonb,now()
+    )
+    on conflict (id) do update set
+      slug = excluded.slug, name = excluded.name, category = excluded.category, manufacturer = excluded.manufacturer,
+      seller = excluded.seller, seller_url = excluded.seller_url, images = excluded.images,
+      description = excluded.description, price = excluded.price, material = excluded.material,
+      color = excluded.color, stock_quantity = excluded.stock_quantity, active = excluded.active,
+      specs = excluded.specs, updated_at = now()`,
+    [
+      next.id,
+      next.slug,
+      next.name,
+      next.category,
+      next.manufacturer,
+      next.seller,
+      next.sellerUrl ?? "",
+      JSON.stringify(next.images),
+      next.description,
+      next.price,
+      next.material,
+      next.color,
+      next.stockQuantity,
+      next.active,
+      JSON.stringify(next.specs),
+    ],
+  );
+  if (actor) await logActivity(sql, `Accessory — ${next.name}`, actor);
+  return next;
+}
+
+export async function deleteAccessory(id: string, actor?: string): Promise<void> {
+  const sql = await sqlClient();
+  await sql.query(`delete from accessories where id = $1`, [id]);
+  if (actor) await logActivity(sql, `Removed accessory — ${id}`, actor);
 }
 
 export async function loadAdminSnapshot(): Promise<AdminSnapshot> {
@@ -391,7 +510,10 @@ export async function deleteListing(id: string, actor?: string): Promise<void> {
   if (actor) await logActivity(sql, "Listing removed", actor);
 }
 
-export async function upsertReport(report: InspectionReport, actor?: string): Promise<InspectionReport> {
+export async function upsertReport(
+  report: InspectionReport,
+  actor?: string,
+): Promise<InspectionReport> {
   const sql = await sqlClient();
   const id = report.id || newId("rep");
   const publicId = report.publicId || id;
@@ -435,7 +557,12 @@ export async function upsertReport(report: InspectionReport, actor?: string): Pr
       report.published,
     ],
   );
-  if (actor) await logActivity(sql, `Report ${report.published ? "published" : "saved"} — ${report.title}`, actor);
+  if (actor)
+    await logActivity(
+      sql,
+      `Report ${report.published ? "published" : "saved"} — ${report.title}`,
+      actor,
+    );
   return { ...report, id, publicId };
 }
 
@@ -615,13 +742,17 @@ function mapAdmin(row: Record<string, unknown>): AdminRow {
 
 export async function countPasswordedAdmins(): Promise<number> {
   const sql = await sqlClient();
-  const rows = await sql<{ n: unknown }>`select count(*)::int as n from admins where password_hash <> ${""}`;
+  const rows = await sql<{
+    n: unknown;
+  }>`select count(*)::int as n from admins where password_hash <> ${""}`;
   return asInt(rows[0]?.n);
 }
 
 export async function findAdminByEmail(email: string): Promise<AdminRow | null> {
   const sql = await sqlClient();
-  const rows = await sql<Record<string, unknown>>`select * from admins where email = ${email} limit 1`;
+  const rows = await sql<
+    Record<string, unknown>
+  >`select * from admins where email = ${email} limit 1`;
   return rows[0] ? mapAdmin(rows[0]) : null;
 }
 

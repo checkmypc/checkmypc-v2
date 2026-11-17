@@ -130,6 +130,9 @@ function AdminHome() {
             <Link to="/admin/bookings">New job</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
+            <Link to="/admin/accessories">Manage accessories</Link>
+          </Button>
+          <Button asChild variant="secondary" size="sm">
             <Link to="/admin/used">Write report</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">

@@ -8,38 +8,53 @@ const ALLOWED = ["image/jpeg", "image/png", "image/webp"] as const;
 export function ImageUpload({
   onUploaded,
   label = "Add photo",
+  multiple = false,
+  maxFiles,
 }: {
   onUploaded: (url: string) => void;
   label?: string;
+  multiple?: boolean;
+  maxFiles?: number;
 }) {
   const [busy, setBusy] = useState(false);
 
-  async function onFile(file: File) {
+  async function uploadFile(file: File) {
     if (!ALLOWED.includes(file.type as (typeof ALLOWED)[number])) {
-      toast.error("Use JPEG, PNG or WebP");
-      return;
+      throw new Error("Use JPEG, PNG or WebP");
     }
     if (file.size > 4_500_000) {
-      toast.error("Max 4.5 MB per photo");
+      throw new Error(`${file.name}: max 4.5 MB per photo`);
+    }
+    const dataUrl = await readDataUrl(file);
+    const saved = await uploadMediaFn({
+      data: {
+        filename: file.name,
+        contentType: file.type as (typeof ALLOWED)[number],
+        dataBase64: dataUrl,
+      },
+    });
+    onUploaded(saved.url);
+  }
+
+  async function onFiles(files: File[]) {
+    if (!files.length) return;
+    if (maxFiles !== undefined && files.length > maxFiles) {
+      toast.error(`Select no more than ${maxFiles} ${maxFiles === 1 ? "image" : "images"}`);
       return;
     }
     setBusy(true);
-    try {
-      const dataUrl = await readDataUrl(file);
-      const saved = await uploadMediaFn({
-        data: {
-          filename: file.name,
-          contentType: file.type as (typeof ALLOWED)[number],
-          dataBase64: dataUrl,
-        },
-      });
-      onUploaded(saved.url);
-      toast.success("Photo added");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Upload failed");
-    } finally {
-      setBusy(false);
+    let uploaded = 0;
+    for (const file of files) {
+      try {
+        await uploadFile(file);
+        uploaded += 1;
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : `Could not upload ${file.name}`);
+      }
     }
+    if (uploaded === 1) toast.success("Photo added");
+    else if (uploaded > 1) toast.success(`${uploaded} photos added`);
+    setBusy(false);
   }
 
   return (
@@ -49,11 +64,12 @@ export function ImageUpload({
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
+          multiple={multiple}
           className="sr-only"
           onChange={(e) => {
-            const file = e.target.files?.[0];
+            const files = Array.from(e.target.files ?? []);
             e.target.value = "";
-            if (file) void onFile(file);
+            void onFiles(files);
           }}
         />
       </label>

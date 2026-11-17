@@ -10,6 +10,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           "/builder",
           "/compare",
           "/products",
+          "/accessories",
           "/prebuilts",
           "/used",
           "/inspection",
@@ -23,9 +24,13 @@ export const Route = createFileRoute("/sitemap.xml")({
         let extra: string[] = [];
         try {
           const { loadPublicSnapshot } = await import("@/lib/server/repo");
-          const snap = await loadPublicSnapshot();
+          const [snap, accessories] = await Promise.all([
+            loadPublicSnapshot(),
+            import("@/lib/server/repo").then(({ loadAccessories }) => loadAccessories()),
+          ]);
           extra = [
             ...snap.products.map((p) => `/products/${p.id}`),
+            ...accessories.map((item) => `/accessories/${item.id}`),
             ...snap.recipes.map((r) => `/prebuilts/${r.id}`),
             ...snap.reports.filter((r) => r.published).map((r) => `/reports/${r.publicId || r.id}`),
           ];
@@ -33,14 +38,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           extra = [];
         }
         const urls = [...staticPaths, ...extra]
-          .map(
-            (path) =>
-              `  <url><loc>${origin}${path}</loc><changefreq>daily</changefreq></url>`,
-          )
+          .map((path) => `  <url><loc>${origin}${path}</loc><changefreq>daily</changefreq></url>`)
           .join("\n");
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
         return new Response(xml, {
-          headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=3600" },
+          headers: {
+            "content-type": "application/xml; charset=utf-8",
+            "cache-control": "public, max-age=3600",
+          },
         });
       },
     },

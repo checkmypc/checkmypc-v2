@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 const LINKS = [
   { to: "/products", key: "nav.components" },
+  { to: "/accessories", key: "nav.accessories" },
   { to: "/compare", key: "nav.compare" },
   { to: "/builder", key: "nav.builder" },
   { to: "/prebuilts", key: "nav.prebuilts" },
@@ -52,7 +53,7 @@ export function SiteHeader() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-border/70 bg-bg/70 backdrop-blur-xl backdrop-saturate-150">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 2xl:max-w-[1440px]">
           <Link
             to="/"
             className="shrink-0 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.96]"
@@ -60,7 +61,7 @@ export function SiteHeader() {
           >
             <Logo />
           </Link>
-          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 2xl:flex">
             {LINKS.map((l) => (
               <Link
                 key={l.to}
@@ -125,7 +126,7 @@ export function SiteHeader() {
             </Button>
             <button
               type="button"
-              className="grid size-11 place-items-center rounded-full text-fg transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[0.96] lg:hidden"
+              className="grid size-11 place-items-center rounded-full text-fg transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[0.96] 2xl:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-label={t("nav.menu")}
               aria-expanded={open}
@@ -152,7 +153,7 @@ export function SiteHeader() {
       {drawerReady &&
         createPortal(
           <div
-            className={cn("fixed inset-0 z-50 lg:hidden", !open && "pointer-events-none")}
+            className={cn("fixed inset-0 z-50 2xl:hidden", !open && "pointer-events-none")}
             aria-hidden={!open}
             inert={!open}
           >

@@ -10,6 +10,7 @@ import {
   Menu,
   MonitorSmartphone,
   Moon,
+  Package,
   Search,
   Settings,
   ShieldCheck,
@@ -28,6 +29,7 @@ const NAV = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/admin/bookings", label: "Bookings", icon: ClipboardList },
   { to: "/admin/catalog", label: "Catalogue", icon: Boxes },
+  { to: "/admin/accessories", label: "Accessories", icon: Package },
   { to: "/admin/used", label: "Used & reports", icon: ShieldCheck },
   { to: "/admin/reports", label: "PDF reports", icon: FileDown },
   { to: "/admin/prebuilts", label: "Prebuilts", icon: MonitorSmartphone },
@@ -36,8 +38,8 @@ const NAV = [
 ] as const;
 
 const NAV_GROUPS = [
-  { label: "Workspace", items: NAV.slice(1, 7) },
-  { label: "Administration", items: NAV.slice(7) },
+  { label: "Workspace", items: NAV.slice(1, 8) },
+  { label: "Administration", items: NAV.slice(8) },
 ] as const;
 
 export function AdminShell() {

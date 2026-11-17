@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { AdminSnapshot, PublicSnapshot } from "./server/repo";
-import type { Booking, OpsSettings, Product, Technician } from "./types";
+import type { Accessory, Booking, OpsSettings, Product, Technician } from "./types";
 import type { InspectionReport, UsedListing } from "./used";
 import type { PrebuiltRecipe } from "./prebuilts";
 
@@ -45,7 +45,36 @@ const productZ = z.object({
   history: z.array(z.object({ d: z.string().max(20), p: z.number() })).max(48),
 });
 
-const bookingStatusZ = z.enum(["new", "confirmed", "scheduled", "in_progress", "done", "cancelled"]);
+const accessoryZ = z.object({
+  id: z.string().max(80).optional(),
+  slug: z.string().max(180).optional(),
+  name: z.string().trim().min(1).max(160),
+  category: z.enum(["gpu-support", "controller-stands", "headphone-stands", "cable-management"]),
+  manufacturer: z.string().max(120),
+  seller: z.string().trim().min(1).max(120),
+  sellerUrl: z
+    .string()
+    .max(500)
+    .refine((value) => !value || /^https?:\/\//i.test(value), "Use an http or https seller URL")
+    .optional(),
+  images: z.array(z.string().min(1).max(400)).max(12),
+  description: z.string().max(4000),
+  price: z.number().int().min(1).max(2_000_000),
+  material: z.string().max(120),
+  color: z.string().max(120),
+  stockQuantity: z.number().int().min(0).max(1_000_000),
+  active: z.boolean(),
+  specs: z.record(z.string().max(80), z.string().max(250)),
+});
+
+const bookingStatusZ = z.enum([
+  "new",
+  "confirmed",
+  "scheduled",
+  "in_progress",
+  "done",
+  "cancelled",
+]);
 const kindZ = z.enum(["inspection", "assembly", "cleaning"]);
 
 const publicBookingZ = z.object({
@@ -181,10 +210,24 @@ function fail(message: string): never {
   throw new Error(message);
 }
 
-export const getPublicSnapshot = createServerFn({ method: "GET" }).handler(async (): Promise<PublicSnapshot> => {
-  const { loadPublicSnapshot } = await import("./server/repo");
-  return loadPublicSnapshot();
+export const getPublicSnapshot = createServerFn({ method: "GET" }).handler(
+  async (): Promise<PublicSnapshot> => {
+    const { loadPublicSnapshot } = await import("./server/repo");
+    return loadPublicSnapshot();
+  },
+);
+
+export const getAccessoriesFn = createServerFn({ method: "GET" }).handler(async () => {
+  const { loadAccessories } = await import("./server/repo");
+  return loadAccessories();
 });
+
+export const getAccessoryFn = createServerFn({ method: "GET" })
+  .validator(z.object({ id: z.string().min(1).max(180) }))
+  .handler(async ({ data }) => {
+    const { loadAccessory } = await import("./server/repo");
+    return loadAccessory(data.id);
+  });
 
 export const getAdminSession = createServerFn({ method: "GET" }).handler(async () => {
   const { adminNeedsSetup, readAdminSession } = await import("./server/session");
@@ -265,11 +308,20 @@ export const changeAdminPasswordFn = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-export const getAdminSnapshot = createServerFn({ method: "GET" }).handler(async (): Promise<AdminSnapshot> => {
+export const getAdminSnapshot = createServerFn({ method: "GET" }).handler(
+  async (): Promise<AdminSnapshot> => {
+    const { requireAdmin } = await import("./server/session");
+    await requireAdmin();
+    const { loadAdminSnapshot } = await import("./server/repo");
+    return loadAdminSnapshot();
+  },
+);
+
+export const getAdminAccessoriesFn = createServerFn({ method: "GET" }).handler(async () => {
   const { requireAdmin } = await import("./server/session");
   await requireAdmin();
-  const { loadAdminSnapshot } = await import("./server/repo");
-  return loadAdminSnapshot();
+  const { loadAdminAccessories } = await import("./server/repo");
+  return loadAdminAccessories();
 });
 
 export const createPublicBooking = createServerFn({ method: "POST" })
@@ -304,6 +356,25 @@ export const saveProductFn = createServerFn({ method: "POST" })
     const session = await requireAdmin();
     const { upsertProduct } = await import("./server/repo");
     return upsertProduct(data as Product, session.email);
+  });
+
+export const saveAccessoryFn = createServerFn({ method: "POST" })
+  .validator(accessoryZ)
+  .handler(async ({ data }) => {
+    const { requireAdmin } = await import("./server/session");
+    const session = await requireAdmin();
+    const { upsertAccessory } = await import("./server/repo");
+    return upsertAccessory(data as Accessory, session.email);
+  });
+
+export const deleteAccessoryFn = createServerFn({ method: "POST" })
+  .validator(z.object({ id: z.string().min(1).max(80) }))
+  .handler(async ({ data }) => {
+    const { requireAdmin } = await import("./server/session");
+    const session = await requireAdmin();
+    const { deleteAccessory } = await import("./server/repo");
+    await deleteAccessory(data.id, session.email);
+    return { ok: true as const };
   });
 
 export const deleteProductFn = createServerFn({ method: "POST" })
@@ -490,7 +561,12 @@ export const importOpsFn = createServerFn({ method: "POST" })
         reports: Array.isArray(snap.reports) ? snap.reports : [],
         recipes: Array.isArray(snap.recipes) ? snap.recipes : [],
         packagePrices: snap.packagePrices ?? {},
-        settings: snap.settings ?? { email: "hello@checkmypc.ma", phone: "", hours: "", whatsapp: "" },
+        settings: snap.settings ?? {
+          email: "hello@checkmypc.ma",
+          phone: "",
+          hours: "",
+          whatsapp: "",
+        },
         team: Array.isArray(snap.team) ? snap.team : [],
         bookings: Array.isArray(snap.bookings) ? snap.bookings : [],
         activity: [],

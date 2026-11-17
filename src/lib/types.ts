@@ -12,6 +12,27 @@ export type CategorySlug =
   | "display"
   | "peripheral";
 
+export type AccessoryCategory =
+  "gpu-support" | "controller-stands" | "headphone-stands" | "cable-management";
+
+export type Accessory = {
+  id: string;
+  slug: string;
+  name: string;
+  category: AccessoryCategory;
+  manufacturer: string;
+  seller: string;
+  sellerUrl?: string;
+  images: string[];
+  description: string;
+  price: number;
+  material: string;
+  color: string;
+  stockQuantity: number;
+  active: boolean;
+  specs: Record<string, string>;
+};
+
 export type Offer = {
   store: string;
   city: string;
@@ -77,7 +98,8 @@ export type CompatCheck = { level: CompatLevel; title: string; detail: string };
 
 export type ServiceKind = "inspection" | "assembly" | "cleaning";
 
-export type BookingStatus = "new" | "confirmed" | "scheduled" | "in_progress" | "done" | "cancelled";
+export type BookingStatus =
+  "new" | "confirmed" | "scheduled" | "in_progress" | "done" | "cancelled";
 
 export type Booking = {
   id: string;

@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { loadProductImageManifest, productGallery } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
 import { studioFallbackImage, themedImage } from "@/lib/theme-images";
@@ -11,6 +12,7 @@ export function ProductGallery({ product }: { product: Product }) {
   const [manifestLoaded, setManifestLoaded] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<string>>(() => new Set());
   const [selectedImage, setSelectedImage] = useState<string>();
+  const [zoomed, setZoomed] = useState(false);
   const touchStart = useRef<number | null>(null);
   const candidates = productGallery(product, manifest).map((image) => themedImage(image, theme));
   const images = candidates.filter((image) => !failedImages.has(image));
@@ -34,6 +36,32 @@ export function ProductGallery({ product }: { product: Product }) {
       active = false;
     };
   }, [product.id]);
+
+  useEffect(() => {
+    if (!zoomed) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setZoomed(false);
+      if (!activeImage || images.length < 2) return;
+      const currentIndex = images.indexOf(activeImage);
+      if (event.key === "ArrowLeft") {
+        setSelectedImage(images[(currentIndex - 1 + images.length) % images.length]);
+      }
+      if (event.key === "ArrowRight") {
+        setSelectedImage(images[(currentIndex + 1) % images.length]);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [zoomed, activeImage, images]);
+
+  useEffect(() => {
+    if (!zoomed) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [zoomed]);
 
   function markFailed(image: string) {
     setFailedImages((failed) => new Set(failed).add(image));
@@ -73,16 +101,26 @@ export function ProductGallery({ product }: { product: Product }) {
         }}
       >
         {activeImage ? (
-          <img
-            key={activeImage}
-            src={activeImage}
-            alt={product.name}
-            className="product-gallery-image"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            onError={(event) => handleImageError(activeImage, event.currentTarget)}
-          />
+          <>
+            <img
+              key={activeImage}
+              src={activeImage}
+              alt={product.name}
+              className="product-gallery-image"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              onError={(event) => handleImageError(activeImage, event.currentTarget)}
+            />
+            <button
+              type="button"
+              className="product-gallery-zoom-button"
+              aria-label={`View ${product.name} image full screen`}
+              onClick={() => setZoomed(true)}
+            >
+              <ZoomIn className="size-4" aria-hidden="true" />
+            </button>
+          </>
         ) : !manifestLoaded ? (
           <div className="product-gallery-loading" role="status" aria-busy="true" />
         ) : (
@@ -169,6 +207,59 @@ export function ProductGallery({ product }: { product: Product }) {
             </button>
           ))}
         </div>
+      )}
+      {zoomed && activeImage && createPortal(
+        <div
+          className="product-gallery-zoom-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${product.name} product image`}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setZoomed(false);
+          }}
+        >
+          <div className="product-gallery-zoom-header">
+            <p className="text-sm font-medium">{product.name}</p>
+            <button
+              type="button"
+              className="product-gallery-zoom-close"
+              aria-label="Close full-screen image"
+              onClick={() => setZoomed(false)}
+            >
+              <X className="size-5" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="product-gallery-zoom-stage">
+            {images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="absolute start-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:start-3"
+                  aria-label="Previous photo"
+                  onClick={() => move(-1)}
+                >
+                  <ChevronLeft className="size-6" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  className="absolute end-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:end-3"
+                  aria-label="Next photo"
+                  onClick={() => move(1)}
+                >
+                  <ChevronRight className="size-6" aria-hidden="true" />
+                </button>
+              </>
+            )}
+            <img
+              key={activeImage}
+              src={activeImage}
+              alt={product.name}
+              className="product-gallery-zoom-image"
+              decoding="async"
+            />
+          </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

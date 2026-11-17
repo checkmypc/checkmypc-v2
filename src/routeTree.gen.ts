@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AssemblyRouteImport } from './routes/assembly'
 import { Route as BuilderRouteImport } from './routes/builder'
@@ -21,7 +22,10 @@ import { Route as InspectionRouteImport } from './routes/inspection'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as UsedRouteImport } from './routes/used'
+import { Route as AccessoriesIndexRouteImport } from './routes/accessories.index'
+import { Route as AccessoriesIdRouteImport } from './routes/accessories.$id'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAccessoriesRouteImport } from './routes/admin.accessories'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminCatalogRouteImport } from './routes/admin.catalog'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
@@ -43,6 +47,11 @@ import { Route as ApiMediaIdRouteImport } from './routes/api/media.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessoriesRoute = AccessoriesRouteImport.update({
+  id: '/accessories',
+  path: '/accessories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -100,9 +109,24 @@ const UsedRoute = UsedRouteImport.update({
   path: '/used',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccessoriesIndexRoute = AccessoriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AccessoriesRoute,
+} as any)
+const AccessoriesIdRoute = AccessoriesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AccessoriesRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAccessoriesRoute = AdminAccessoriesRouteImport.update({
+  id: '/accessories',
+  path: '/accessories',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBookingsRoute = AdminBookingsRouteImport.update({
@@ -193,6 +217,7 @@ const ApiMediaIdRoute = ApiMediaIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accessories': typeof AccessoriesRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/assembly': typeof AssemblyRoute
   '/builder': typeof BuilderRoute
@@ -204,6 +229,8 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/used': typeof UsedRoute
+  '/accessories/$id': typeof AccessoriesIdRoute
+  '/admin/accessories': typeof AdminAccessoriesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/login': typeof AdminLoginRoute
@@ -217,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/prebuilts/$id': typeof PrebuiltsIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/reports/$id': typeof ReportsIdRoute
+  '/accessories/': typeof AccessoriesIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/prebuilts/': typeof PrebuiltsIndexRoute
@@ -235,6 +263,8 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/used': typeof UsedRoute
+  '/accessories/$id': typeof AccessoriesIdRoute
+  '/admin/accessories': typeof AdminAccessoriesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/login': typeof AdminLoginRoute
@@ -248,6 +278,7 @@ export interface FileRoutesByTo {
   '/prebuilts/$id': typeof PrebuiltsIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/reports/$id': typeof ReportsIdRoute
+  '/accessories': typeof AccessoriesIndexRoute
   '/admin': typeof AdminIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/prebuilts': typeof PrebuiltsIndexRoute
@@ -257,6 +288,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accessories': typeof AccessoriesRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/assembly': typeof AssemblyRoute
   '/builder': typeof BuilderRoute
@@ -268,6 +300,8 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/used': typeof UsedRoute
+  '/accessories/$id': typeof AccessoriesIdRoute
+  '/admin/accessories': typeof AdminAccessoriesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/catalog': typeof AdminCatalogRoute
   '/admin/login': typeof AdminLoginRoute
@@ -281,6 +315,7 @@ export interface FileRoutesById {
   '/prebuilts/$id': typeof PrebuiltsIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/reports/$id': typeof ReportsIdRoute
+  '/accessories/': typeof AccessoriesIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/prebuilts/': typeof PrebuiltsIndexRoute
@@ -291,6 +326,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/accessories'
     | '/admin'
     | '/assembly'
     | '/builder'
@@ -302,6 +338,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/used'
+    | '/accessories/$id'
+    | '/admin/accessories'
     | '/admin/bookings'
     | '/admin/catalog'
     | '/admin/login'
@@ -315,6 +353,7 @@ export interface FileRouteTypes {
     | '/prebuilts/$id'
     | '/products/$id'
     | '/reports/$id'
+    | '/accessories/'
     | '/admin/'
     | '/guides/'
     | '/prebuilts/'
@@ -333,6 +372,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/used'
+    | '/accessories/$id'
+    | '/admin/accessories'
     | '/admin/bookings'
     | '/admin/catalog'
     | '/admin/login'
@@ -346,6 +387,7 @@ export interface FileRouteTypes {
     | '/prebuilts/$id'
     | '/products/$id'
     | '/reports/$id'
+    | '/accessories'
     | '/admin'
     | '/guides'
     | '/prebuilts'
@@ -354,6 +396,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/accessories'
     | '/admin'
     | '/assembly'
     | '/builder'
@@ -365,6 +408,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/used'
+    | '/accessories/$id'
+    | '/admin/accessories'
     | '/admin/bookings'
     | '/admin/catalog'
     | '/admin/login'
@@ -378,6 +423,7 @@ export interface FileRouteTypes {
     | '/prebuilts/$id'
     | '/products/$id'
     | '/reports/$id'
+    | '/accessories/'
     | '/admin/'
     | '/guides/'
     | '/prebuilts/'
@@ -387,6 +433,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccessoriesRoute: typeof AccessoriesRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
   AssemblyRoute: typeof AssemblyRoute
   BuilderRoute: typeof BuilderRoute
@@ -416,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessories': {
+      id: '/accessories'
+      path: '/accessories'
+      fullPath: '/accessories'
+      preLoaderRoute: typeof AccessoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -495,11 +549,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accessories/': {
+      id: '/accessories/'
+      path: '/'
+      fullPath: '/accessories/'
+      preLoaderRoute: typeof AccessoriesIndexRouteImport
+      parentRoute: typeof AccessoriesRoute
+    }
+    '/accessories/$id': {
+      id: '/accessories/$id'
+      path: '/$id'
+      fullPath: '/accessories/$id'
+      preLoaderRoute: typeof AccessoriesIdRouteImport
+      parentRoute: typeof AccessoriesRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/accessories': {
+      id: '/admin/accessories'
+      path: '/accessories'
+      fullPath: '/admin/accessories'
+      preLoaderRoute: typeof AdminAccessoriesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/bookings': {
@@ -624,7 +699,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AccessoriesRouteChildren {
+  AccessoriesIdRoute: typeof AccessoriesIdRoute
+  AccessoriesIndexRoute: typeof AccessoriesIndexRoute
+}
+
+const AccessoriesRouteChildren: AccessoriesRouteChildren = {
+  AccessoriesIdRoute: AccessoriesIdRoute,
+  AccessoriesIndexRoute: AccessoriesIndexRoute,
+}
+
+const AccessoriesRouteWithChildren = AccessoriesRoute._addFileChildren(
+  AccessoriesRouteChildren,
+)
+
 interface AdminRouteChildren {
+  AdminAccessoriesRoute: typeof AdminAccessoriesRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminCatalogRoute: typeof AdminCatalogRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -637,6 +727,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAccessoriesRoute: AdminAccessoriesRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminCatalogRoute: AdminCatalogRoute,
   AdminLoginRoute: AdminLoginRoute,
@@ -652,6 +743,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccessoriesRoute: AccessoriesRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
   AssemblyRoute: AssemblyRoute,
   BuilderRoute: BuilderRoute,
