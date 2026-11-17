@@ -431,7 +431,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     est: "Estimation",
   },
   ar: {
-    "brand.slogan": "شيّك قبل ما تشري.",
+    "brand.slogan": "Check before you buy.",
     "brand.darija": "فحص قبل ما تشري",
     "nav.home": "الرئيسية",
     "nav.components": "المكونات",
