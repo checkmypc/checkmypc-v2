@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { whatsappHref } from "@/lib/bookings";
 import { ingestPublicBooking } from "@/lib/ops";
 import { useI18n } from "@/lib/i18n";
-import { CITIES, type Package } from "@/lib/services";
+import { CITIES, CONTACT, type Package } from "@/lib/services";
 import type { ServiceKind } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -60,13 +60,14 @@ export function BookingForm({
       const text = [
         `CHECKMYPC — ${kind}`,
         `${booking.name} · ${booking.city}`,
+        `Phone: ${booking.phone}`,
         booking.packageId,
         booking.listingUrl,
         booking.notes,
       ]
         .filter(Boolean)
         .join("\n");
-      setWa(whatsappHref(booking.phone, text));
+      setWa(whatsappHref(CONTACT.whatsapp, text));
       setSent(booking.id);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not send the request. Try again.");

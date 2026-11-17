@@ -165,6 +165,7 @@ export const CLEANING = {
 
 export const CONTACT = {
   email: "contact@checkmypc.ma",
+  whatsapp: "212691259738",
   hours: "Mon–Sat 10:00–19:00",
   cities: CITIES,
   instagram: "https://instagram.com/checkmypc.ma",
