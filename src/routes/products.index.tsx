@@ -9,7 +9,6 @@ import {
   CATEGORY_ORDER,
   categoryLabel,
   allProducts,
-  includeManifestComponents,
   useProductsWithPhotos,
 } from "@/lib/catalog";
 import { useI18n } from "@/lib/i18n";
@@ -33,10 +32,7 @@ export function ProductsPage() {
   const { t } = useI18n();
   const { category, q } = Route.useSearch();
   const liveProducts = useOps((s) => (s.hydrated ? s.products : undefined));
-  const sourceProducts = useMemo(
-    () => (liveProducts ? includeManifestComponents(liveProducts) : allProducts()),
-    [liveProducts],
-  );
+  const sourceProducts = useMemo(() => liveProducts ?? allProducts(), [liveProducts]);
   const {
     products,
     loading: photosLoading,

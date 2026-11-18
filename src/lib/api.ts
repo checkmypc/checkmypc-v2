@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import type { AdminSnapshot, PublicSnapshot } from "./server/repo";
+import type { AdminSnapshot, PublicSnapshot, PublicSupplementSnapshot } from "./server/repo";
 import type { Accessory, Booking, OpsSettings, Product, Technician } from "./types";
 import type { InspectionReport, UsedListing } from "./used";
 import type { PrebuiltRecipe } from "./prebuilts";
@@ -210,14 +210,35 @@ function fail(message: string): never {
   throw new Error(message);
 }
 
+async function setNoStoreResponse(): Promise<void> {
+  const { setResponseHeader } = await import("@tanstack/react-start/server");
+  setResponseHeader("Cache-Control", "no-store, max-age=0");
+}
+
 export const getPublicSnapshot = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicSnapshot> => {
+    await setNoStoreResponse();
     const { loadPublicSnapshot } = await import("./server/repo");
     return loadPublicSnapshot();
   },
 );
 
+export const getPublicProducts = createServerFn({ method: "GET" }).handler(async () => {
+  await setNoStoreResponse();
+  const { loadPublicProducts } = await import("./server/repo");
+  return loadPublicProducts();
+});
+
+export const getPublicSupplement = createServerFn({ method: "GET" }).handler(
+  async (): Promise<PublicSupplementSnapshot> => {
+    await setNoStoreResponse();
+    const { loadPublicSupplement } = await import("./server/repo");
+    return loadPublicSupplement();
+  },
+);
+
 export const getAccessoriesFn = createServerFn({ method: "GET" }).handler(async () => {
+  await setNoStoreResponse();
   const { loadAccessories } = await import("./server/repo");
   return loadAccessories();
 });
@@ -225,11 +246,13 @@ export const getAccessoriesFn = createServerFn({ method: "GET" }).handler(async 
 export const getAccessoryFn = createServerFn({ method: "GET" })
   .validator(z.object({ id: z.string().min(1).max(180) }))
   .handler(async ({ data }) => {
+    await setNoStoreResponse();
     const { loadAccessory } = await import("./server/repo");
     return loadAccessory(data.id);
   });
 
 export const getAdminSession = createServerFn({ method: "GET" }).handler(async () => {
+  await setNoStoreResponse();
   const { adminNeedsSetup, readAdminSession } = await import("./server/session");
   const session = await readAdminSession();
   return {
@@ -310,6 +333,7 @@ export const changeAdminPasswordFn = createServerFn({ method: "POST" })
 
 export const getAdminSnapshot = createServerFn({ method: "GET" }).handler(
   async (): Promise<AdminSnapshot> => {
+    await setNoStoreResponse();
     const { requireAdmin } = await import("./server/session");
     await requireAdmin();
     const { loadAdminSnapshot } = await import("./server/repo");
@@ -318,6 +342,7 @@ export const getAdminSnapshot = createServerFn({ method: "GET" }).handler(
 );
 
 export const getAdminAccessoriesFn = createServerFn({ method: "GET" }).handler(async () => {
+  await setNoStoreResponse();
   const { requireAdmin } = await import("./server/session");
   await requireAdmin();
   const { loadAdminAccessories } = await import("./server/repo");

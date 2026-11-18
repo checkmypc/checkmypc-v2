@@ -11,7 +11,8 @@ import {
   deleteTechFn,
   getAdminSession,
   getAdminSnapshot,
-  getPublicSnapshot,
+  getPublicProducts,
+  getPublicSupplement,
   importOpsFn,
   reseedCatalogueFn,
   saveBookingFn,
@@ -24,7 +25,7 @@ import {
   setPackagePriceFn,
   touchPricesFn,
 } from "./api";
-import { catalog, includeManifestComponents, recomputeProduct, bindLiveProducts } from "./catalog";
+import { catalog, recomputeProduct, bindLiveProducts } from "./catalog";
 import { bindLiveRecipes, type PrebuiltRecipe } from "./prebuilts";
 import { ALL_PACKAGES, CONTACT, bindLivePrices } from "./services";
 import { bindLiveUsed, type InspectionReport, type UsedListing } from "./used";
@@ -125,7 +126,7 @@ export type OpsState = OpsSnapshot & {
   upsertProduct: (p: Product) => Promise<void>;
   patchProduct: (id: string, patch: Partial<Product>) => void;
   setOffers: (id: string, offers: Offer[]) => void;
-  deleteProduct: (id: string) => void;
+  deleteProduct: (id: string) => Promise<void>;
   touchPrices: () => void;
   upsertListing: (l: UsedListing) => void;
   deleteListing: (id: string) => void;
@@ -143,7 +144,24 @@ export type OpsState = OpsSnapshot & {
 };
 
 const productSaveTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const productMutationQueues = new Map<string, Promise<void>>();
+const deletingProducts = new Set<string>();
 let hydrateGen = 0;
+let hydratePromise: Promise<void> | null = null;
+
+function queueProductMutation<T>(id: string, mutation: () => Promise<T>): Promise<T> {
+  const previous = productMutationQueues.get(id) ?? Promise.resolve();
+  const next = previous.then(mutation);
+  const settled = next.then(
+    () => undefined,
+    () => undefined,
+  );
+  productMutationQueues.set(id, settled);
+  void settled.then(() => {
+    if (productMutationQueues.get(id) === settled) productMutationQueues.delete(id);
+  });
+  return next;
+}
 
 export const useOps = create<OpsState>((set, get) => {
   const apply = (patch: Partial<OpsSnapshot>, activity?: string) => {
@@ -161,7 +179,7 @@ export const useOps = create<OpsState>((set, get) => {
 
   const refreshAdmin = async () => {
     const snap = await getAdminSnapshot();
-    set({ ...snap, products: includeManifestComponents(snap.products), hydrated: true, unlocked: true });
+    set({ ...snap, hydrated: true, unlocked: true });
   };
 
   return {
@@ -171,48 +189,69 @@ export const useOps = create<OpsState>((set, get) => {
     adminEmail: null,
     hydrate: () => {
       if (typeof window === "undefined") return Promise.resolve();
+      if (hydratePromise) return hydratePromise;
       const gen = ++hydrateGen;
-      return (async () => {
+      const request = (async () => {
+        let publicSnapshotLoaded = false;
         try {
-          const [pub, session] = await Promise.all([getPublicSnapshot(), getAdminSession()]);
+          const sessionPromise = getAdminSession().then(
+            (session) => ({ session }),
+            (error: unknown) => ({ error }),
+          );
+          const products = await getPublicProducts();
           if (gen !== hydrateGen) return;
-          if (session.ok) {
-            const admin = await getAdminSnapshot();
-            if (gen !== hydrateGen) return;
-            set({
-              ...admin,
-              products: includeManifestComponents(admin.products),
-              hydrated: true,
-              unlocked: true,
-              adminEmail: session.email,
-            });
-            return;
-          }
           set({
             ...seedSnapshot(),
-            products: includeManifestComponents(pub.products.length ? pub.products : seedSnapshot().products),
+            products,
+            hydrated: true,
+            unlocked: false,
+            adminEmail: null,
+          });
+          publicSnapshotLoaded = true;
+          const [pub, sessionResult] = await Promise.all([getPublicSupplement(), sessionPromise]);
+          if ("error" in sessionResult) throw sessionResult.error;
+          if (gen !== hydrateGen) return;
+          set({
             listings: pub.listings.length ? pub.listings : seedSnapshot().listings,
             reports: pub.reports,
             recipes: pub.recipes.length ? pub.recipes : seedSnapshot().recipes,
             packagePrices: { ...defaultPrices(), ...pub.packagePrices },
             settings: pub.settings,
             team: pub.team.length ? pub.team : seedSnapshot().team,
-            bookings: [],
-            activity: [],
+          });
+          const { session } = sessionResult;
+          if (session.ok) {
+            const admin = await getAdminSnapshot();
+            if (gen !== hydrateGen) return;
+            set({
+              ...admin,
+              hydrated: true,
+              unlocked: true,
+              adminEmail: session.email,
+            });
+          }
+        } catch (error) {
+          if (gen !== hydrateGen) return;
+          console.error("Unable to load the latest catalogue data", error);
+          set({
+            ...(publicSnapshotLoaded ? {} : { products: [] }),
             hydrated: true,
             unlocked: false,
-            adminEmail: null,
           });
-        } catch {
-          if (gen !== hydrateGen) return;
-          set({ hydrated: true, unlocked: false });
+          toast.error("Could not load the latest catalogue data. Refresh to try again.");
         }
       })();
+      const trackedRequest = request.finally(() => {
+        if (hydratePromise === trackedRequest) hydratePromise = null;
+      });
+      hydratePromise = trackedRequest;
+      return trackedRequest;
     },
     persist: () => undefined,
     log: (text) => apply({}, text),
     lock: async () => {
       hydrateGen += 1;
+      hydratePromise = null;
       set({ unlocked: false, adminEmail: null, bookings: [], activity: [] });
       try {
         await adminLogout();
@@ -255,13 +294,15 @@ export const useOps = create<OpsState>((set, get) => {
     },
     upsertProduct: async (p) => {
       const next = recomputeProduct(p);
-      const saved = await saveProductFn({ data: next });
+      if (deletingProducts.has(next.id)) throw new Error("This product is being deleted");
+      const saved = await queueProductMutation(next.id, () => saveProductFn({ data: next }));
       const list = get().products;
       const i = list.findIndex((x) => x.id === saved.id);
       const products = i >= 0 ? list.map((x, idx) => (idx === i ? saved : x)) : [saved, ...list];
       apply({ products }, `Catalogue — ${saved.name}`);
     },
     patchProduct: (id, patch) => {
+      if (deletingProducts.has(id)) return;
       const products = get().products.map((p) => (p.id === id ? recomputeProduct({ ...p, ...patch }) : p));
       apply({ products });
       const timer = productSaveTimers.get(id);
@@ -269,21 +310,43 @@ export const useOps = create<OpsState>((set, get) => {
       productSaveTimers.set(
         id,
         setTimeout(() => {
+          productSaveTimers.delete(id);
           const row = get().products.find((p) => p.id === id);
-          if (row) void saveProductFn({ data: row }).catch((err) => toast.error(errMessage(err)));
+          if (row) {
+            void queueProductMutation(id, () => saveProductFn({ data: row })).catch((err) =>
+              toast.error(errMessage(err)),
+            );
+          }
         }, 450),
       );
     },
     setOffers: (id, offers) => {
+      if (deletingProducts.has(id)) return;
       const products = get().products.map((p) => (p.id === id ? recomputeProduct({ ...p, offers }) : p));
       apply({ products }, "Offers updated");
       const row = products.find((p) => p.id === id);
-      if (row) void saveProductFn({ data: row }).catch((err) => toast.error(errMessage(err)));
+      if (row) {
+        void queueProductMutation(id, () => saveProductFn({ data: row })).catch((err) =>
+          toast.error(errMessage(err)),
+        );
+      }
     },
-    deleteProduct: (id) => {
-      const row = get().products.find((p) => p.id === id);
-      apply({ products: get().products.filter((p) => p.id !== id) }, row ? `Removed SKU — ${row.name}` : "Removed SKU");
-      void deleteProductFn({ data: { id } }).catch((err) => toast.error(errMessage(err)));
+    deleteProduct: async (id) => {
+      if (deletingProducts.has(id)) return;
+      deletingProducts.add(id);
+      const timer = productSaveTimers.get(id);
+      if (timer) clearTimeout(timer);
+      productSaveTimers.delete(id);
+      try {
+        await queueProductMutation(id, () => deleteProductFn({ data: { id } }));
+        const row = get().products.find((product) => product.id === id);
+        apply(
+          { products: get().products.filter((product) => product.id !== id) },
+          row ? `Removed SKU — ${row.name}` : "Removed SKU",
+        );
+      } finally {
+        deletingProducts.delete(id);
+      }
     },
     touchPrices: () => {
       const products = get().products.map((p) =>

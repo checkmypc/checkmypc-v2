@@ -126,10 +126,17 @@ function AdminCatalog() {
             onDelete={
               sel === "new"
                 ? undefined
-                : () => {
-                    if (current) remove(current.id);
-                    setSel(null);
-                    toast.success("Removed");
+                : async () => {
+                    if (!current) return;
+                    try {
+                      await remove(current.id);
+                      setSel(null);
+                      toast.success("Removed");
+                    } catch (error) {
+                      toast.error(
+                        error instanceof Error ? error.message : "Could not remove SKU. Please try again.",
+                      );
+                    }
                   }
             }
           />
@@ -281,7 +288,7 @@ function ProductEditor({
   isNew: boolean;
   onSave: (p: Product) => Promise<void>;
   onCancel: () => void;
-  onDelete?: () => void;
+  onDelete?: () => Promise<void>;
 }) {
   const [form, setForm] = useState<Product>(() => ({
     ...product,
@@ -387,7 +394,10 @@ function ProductEditor({
             id="p-img"
             className="min-w-0 flex-1"
             value={form.image}
-            onChange={(e) => set("image", e.target.value)}
+            onChange={(e) => {
+              const image = e.target.value;
+              setForm((current) => ({ ...current, image, images: image ? [image] : [] }));
+            }}
             placeholder="Photo path"
           />
           <ImageUpload
@@ -395,7 +405,7 @@ function ProductEditor({
               setForm((current) => ({
                 ...current,
                 image: url,
-                images: [url, ...(current.images ?? []).filter((image) => image !== url)],
+                images: [url],
               }))
             }
           />
@@ -587,8 +597,20 @@ function ProductEditor({
           {saving ? "Saving…" : "Save SKU"}
         </Button>
         {onDelete && (
-          <Button type="button" variant="danger" onClick={onDelete}>
-            Delete SKU
+          <Button
+            type="button"
+            variant="danger"
+            disabled={saving}
+            onClick={async () => {
+              setSaving(true);
+              try {
+                await onDelete();
+              } finally {
+                setSaving(false);
+              }
+            }}
+          >
+            {saving ? "Deleting…" : "Delete SKU"}
           </Button>
         )}
       </div>

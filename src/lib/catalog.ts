@@ -36,14 +36,9 @@ export function bindLiveProducts(fn: () => Product[] | undefined) {
   liveProductsFn = fn;
 }
 
-export function includeManifestComponents(products: Product[]): Product[] {
-  const productIds = new Set(products.map((product) => product.id));
-  return [...products, ...MANIFEST_COMPONENTS.filter((product) => !productIds.has(product.id))];
-}
-
 export function allProducts(): Product[] {
   const live = liveProductsFn?.();
-  return includeManifestComponents(live && live.length ? live : catalog.products);
+  return live ?? catalog.products;
 }
 
 export function productById(id: string): Product | undefined {
@@ -106,19 +101,20 @@ function productPhotoPath(path: string): string | undefined {
 }
 
 export function hasProductPhoto(product: Product, imageManifest?: ProductImageManifest): boolean {
-  const manifestPhotos = new Set(
-    (imageManifest?.manifest[product.id] ?? [])
-      .map(productPhotoPath)
-      .filter((path): path is string => Boolean(path)),
-  );
-  const savedMedia = productGallery(product, imageManifest).some((path) => path.startsWith("/api/media/"));
-  return manifestPhotos.size > 0 || savedMedia;
+  return productGallery(product, imageManifest).length > 0;
 }
 
 export function productGallery(p: Product, imageManifest?: ProductImageManifest): string[] {
-  const manifestImages = imageManifest?.manifest[p.id] ?? [];
-  const listedImages = [p.image, ...(p.images ?? []), ...manifestImages];
-  return [...new Set(listedImages.map(productPhotoPath).filter((path): path is string => Boolean(path)))];
+  const listedImages = [p.image, ...(p.images ?? [])]
+    .map(productPhotoPath)
+    .filter((path): path is string => Boolean(path));
+  if (p.images !== undefined) {
+    return [...new Set(listedImages)];
+  }
+  const manifestImages = (imageManifest?.manifest[p.id] ?? [])
+    .map(productPhotoPath)
+    .filter((path): path is string => Boolean(path));
+  return [...new Set([...listedImages, ...manifestImages])];
 }
 
 export function useProductsWithPhotos(products: Product[]) {

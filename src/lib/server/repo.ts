@@ -29,6 +29,8 @@ export type PublicSnapshot = {
   team: Technician[];
 };
 
+export type PublicSupplementSnapshot = Omit<PublicSnapshot, "products">;
+
 export type AdminSnapshot = PublicSnapshot & {
   bookings: Booking[];
   activity: ActivityItem[];
@@ -210,10 +212,8 @@ async function sqlClient(): Promise<Sql> {
   return sql;
 }
 
-export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
-  const sql = await sqlClient();
-  const [products, listings, reports, recipes, prices, settings, team] = await Promise.all([
-    sql<ProductRow>`select * from products order by category, name`,
+async function loadPublicSupplementSnapshot(sql: Sql): Promise<PublicSupplementSnapshot> {
+  const [listings, reports, recipes, prices, settings, team] = await Promise.all([
     sql<ListingRow>`select * from used_listings order by title`,
     sql<ReportRow>`select * from inspection_reports where published = true order by date desc`,
     sql<RecipeRow>`select * from prebuilts order by title`,
@@ -222,7 +222,6 @@ export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
     sql<TechRow>`select * from technicians where active = true order by name`,
   ]);
   return {
-    products: products.map(mapProduct),
     listings: listings.map(mapListing),
     reports: reports.map(mapReport),
     recipes: recipes.map(mapRecipe),
@@ -230,6 +229,25 @@ export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
     settings: mapSettings(settings[0]),
     team: team.map(mapTech),
   };
+}
+
+export async function loadPublicProducts(): Promise<Product[]> {
+  const sql = await sqlClient();
+  const products = await sql<ProductRow>`select * from products order by category, name`;
+  return products.map(mapProduct);
+}
+
+export async function loadPublicSupplement(): Promise<PublicSupplementSnapshot> {
+  return loadPublicSupplementSnapshot(await sqlClient());
+}
+
+export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
+  const sql = await sqlClient();
+  const [products, supplement] = await Promise.all([
+    sql<ProductRow>`select * from products order by category, name`,
+    loadPublicSupplementSnapshot(sql),
+  ]);
+  return { products: products.map(mapProduct), ...supplement };
 }
 
 export async function loadAccessories(): Promise<Accessory[]> {
