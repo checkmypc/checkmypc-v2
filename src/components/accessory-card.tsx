@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { AccessoryGallery } from "@/components/accessory-gallery";
 import {
   accessoryAvailability,
-  accessoryCategoryLabel,
   accessorySellerLabel,
 } from "@/lib/accessories";
 import { CONTACT } from "@/lib/services";
@@ -36,35 +35,16 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
         className="absolute inset-0 z-20 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       />
       <div className="product-card-image-frame pointer-events-none relative z-10 overflow-hidden rounded-xl border border-border bg-bg">
-        <Badge className="pointer-events-none absolute start-3 top-3 z-10 bg-surface/90 text-muted shadow-[var(--shadow-border)] backdrop-blur">
-          {accessoryCategoryLabel(accessory.category)}
-        </Badge>
         <AccessoryGallery images={accessory.images} name={accessory.name} compact />
       </div>
-      <div className="relative flex flex-1 flex-col px-1 pt-3 pointer-events-none sm:pt-4">
+      <div className="relative flex flex-1 flex-col px-1 pt-2 pointer-events-none sm:pt-3">
         <span className="w-fit rounded-full border border-primary/15 bg-primary/5 px-2.5 py-1 text-[11px] font-medium text-primary">
           Sold by {accessorySellerLabel(accessory.seller)}
         </span>
-        <h2 className="mt-2 line-clamp-2 min-h-10 font-display text-base font-semibold leading-5 transition-colors group-hover:text-primary">
+        <h2 className="mt-1.5 line-clamp-2 min-h-10 font-display text-base font-semibold leading-5 transition-colors group-hover:text-primary">
           {accessory.name}
         </h2>
-        {accessory.manufacturer && (
-          <p className="mt-1 truncate text-xs text-muted">{accessory.manufacturer}</p>
-        )}
-        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs">
-          {[
-            ["Material", accessory.material],
-            ["Color", accessory.color],
-          ]
-            .filter(([, value]) => value)
-            .map(([label, value]) => (
-              <div key={label} className="min-w-0">
-                <dt className="text-muted">{label}</dt>
-                <dd className="truncate font-medium">{value}</dd>
-              </div>
-            ))}
-        </dl>
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-2 border-t border-border pt-3">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-2 gap-y-1 pt-2">
           <div className="min-w-0">
             <p className="product-price whitespace-nowrap font-display text-base font-bold tabular-nums ltr-isolate sm:text-lg">
               {dh(accessory.price)}
@@ -72,14 +52,19 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
           </div>
           <Badge tone={availability.tone}>{availability.label}</Badge>
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <Button asChild size="sm" variant="secondary" className="pointer-events-auto relative z-30">
+        <div className="accessory-card-actions mt-3 grid gap-2">
+          <Button
+            asChild
+            size="sm"
+            variant="secondary"
+            className="pointer-events-auto relative z-30 w-full whitespace-nowrap px-0 sm:px-3.5"
+          >
             <Link to="/accessories/$id" params={{ id: accessory.slug }}>
               Product details
             </Link>
           </Button>
           {accessory.stockQuantity > 0 ? (
-            <Button asChild size="sm" className="pointer-events-auto relative z-30">
+            <Button asChild size="sm" className="pointer-events-auto relative z-30 w-full px-0 sm:px-3.5">
               <a
                 href={orderHref}
                 target={!isCheckmypcSeller && accessory.sellerUrl ? "_blank" : undefined}
@@ -89,7 +74,7 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
               </a>
             </Button>
           ) : (
-            <Button size="sm" disabled className="pointer-events-auto relative z-30">
+            <Button size="sm" disabled className="pointer-events-auto relative z-30 w-full px-0 sm:px-3.5">
               Out of stock
             </Button>
           )}

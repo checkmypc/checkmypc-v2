@@ -81,7 +81,7 @@ export function AccessoryGallery({
             <span>Product photos coming soon</span>
           </div>
         )}
-        {images.length > 1 && (
+        {!compact && images.length > 1 && (
           <>
             <button
               type="button"

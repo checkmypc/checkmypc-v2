@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n";
 import { useBuild } from "@/lib/store";
 import type { Product } from "@/lib/types";
 import { dh } from "@/lib/utils";
-import { categoryLabel, lowestOffer } from "@/lib/catalog";
+import { lowestOffer } from "@/lib/catalog";
 
 export function ProductCard({ product }: { product: Product }) {
   const { t } = useI18n();
@@ -21,14 +21,17 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="lift group flex min-w-0 flex-col rounded-2xl bg-surface p-3 shadow-[var(--shadow-border)] sm:p-4">
       <div className="product-card-image-frame relative block overflow-hidden rounded-xl border border-border bg-bg">
-        <span className="absolute start-3 top-3 z-10 rounded-full bg-surface/90 px-2.5 py-1 text-[11px] font-medium text-muted shadow-[var(--shadow-border)] backdrop-blur">
-          {categoryLabel(product.category)}
-        </span>
-        <ProductImage
-          product={product}
-          controls
-          className={`product-card-image product-card-image--${product.category} size-full object-contain p-4 transition-opacity duration-200 sm:p-5`}
-        />
+        <Link
+          to="/products/$id"
+          params={{ id: product.id }}
+          aria-label={`${product.name} details`}
+          className="absolute inset-0"
+        >
+          <ProductImage
+            product={product}
+            className={`product-card-image product-card-image--${product.category} size-full object-contain p-4 transition-opacity duration-200 sm:p-5`}
+          />
+        </Link>
       </div>
       <div className="flex flex-1 flex-col px-1 pt-3 sm:pt-4">
         <p className="text-xs font-medium tracking-wide text-muted">{product.brand}</p>

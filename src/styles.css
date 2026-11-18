@@ -1546,6 +1546,10 @@
   cursor: pointer;
 }
 
+.accessory-card-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 640px) {
   .product-gallery-main {
     aspect-ratio: 1 / 1;
@@ -1559,6 +1563,10 @@
   .product-gallery-arrow {
     width: 2.5rem;
     height: 2.5rem;
+  }
+
+  .accessory-card-actions {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
