@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Moon, Search, Sun, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Logo } from "@/components/brand/logo";
@@ -21,7 +21,7 @@ const LINKS = [
 ] as const;
 
 export function SiteHeader() {
-  const { t, lang, setLang, theme, setTheme } = useI18n();
+  const { t, lang, setLang } = useI18n();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [drawerReady, setDrawerReady] = useState(false);
@@ -95,31 +95,6 @@ export function SiteHeader() {
                 </span>
               )}
             </Link>
-            <button
-              type="button"
-              className="grid size-11 place-items-center rounded-full text-muted transition-[background-color,color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface-2 hover:text-fg active:scale-[0.96]"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              aria-label={theme === "dark" ? t("theme.light") : t("theme.dark")}
-            >
-              <span className="relative grid size-4 place-items-center">
-                <Sun
-                  className={cn(
-                    "absolute size-4 transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-                    theme === "dark"
-                      ? "scale-100 opacity-100 blur-none"
-                      : "scale-[0.25] opacity-0 blur-[4px]",
-                  )}
-                />
-                <Moon
-                  className={cn(
-                    "size-4 transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
-                    theme === "dark"
-                      ? "scale-[0.25] opacity-0 blur-[4px]"
-                      : "scale-100 opacity-100 blur-none",
-                  )}
-                />
-              </span>
-            </button>
             <LanguageSelect value={lang} onChange={setLang} className="hidden sm:inline-flex" />
             <Button asChild size="sm" className="hidden md:inline-flex">
               <Link to="/inspection">{t("nav.book")}</Link>

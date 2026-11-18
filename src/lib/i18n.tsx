@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { getPublicAppearance } from "./api";
+import { useOps } from "./ops";
 import type { Lang } from "./types";
 
 export const LANGS: { id: Lang; label: string }[] = [
@@ -643,14 +645,12 @@ const DICT: Record<Lang, Record<string, string>> = {
 };
 
 const LANG_KEY = "cmp.lang.v1";
-const THEME_KEY = "cmp.theme.v1";
 
 type I18nCtx = {
   lang: Lang;
   setLang: (l: Lang) => void;
   t: (key: string) => string;
   theme: "light" | "dark";
-  setTheme: (t: "light" | "dark") => void;
 };
 
 const Ctx = createContext<I18nCtx | null>(null);
@@ -663,32 +663,59 @@ function applyDom(lang: Lang, theme: "light" | "dark") {
   root.dataset.theme = theme;
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
+export function I18nProvider({
+  children,
+  initialTheme,
+}: {
+  children: ReactNode;
+  initialTheme: "light" | "dark";
+}) {
   const [lang, setLangState] = useState<Lang>("en");
-  const [theme, setThemeState] = useState<"light" | "dark">("dark");
+  const [theme, setThemeState] = useState<"light" | "dark">(initialTheme);
+  const appearance = useOps((state) => state.settings.appearance);
+  const hydrated = useOps((state) => state.hydrated);
+  const syncAppearance = useOps((state) => state.syncAppearance);
 
   useEffect(() => {
     const storedL = localStorage.getItem(LANG_KEY) as Lang | null;
-    const storedT = localStorage.getItem(THEME_KEY) as "light" | "dark" | null;
     const nextLang = storedL === "en" || storedL === "fr" || storedL === "ar" ? storedL : "en";
-    const nextTheme =
-      storedT === "light" || storedT === "dark"
-        ? storedT
-        : window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark";
     setLangState(nextLang);
-    setThemeState(nextTheme);
-    applyDom(nextLang, nextTheme);
-  }, []);
+    applyDom(nextLang, initialTheme);
+  }, [initialTheme]);
+
+  useEffect(() => {
+    if (hydrated) setThemeState(appearance);
+  }, [appearance, hydrated]);
+
+  useEffect(() => {
+    let active = true;
+    const refreshAppearance = async () => {
+      try {
+        const next = await getPublicAppearance();
+        if (!active) return;
+        syncAppearance(next);
+        setThemeState(next);
+      } catch (error) {
+        console.error("Unable to refresh global appearance", error);
+      }
+    };
+    const refreshWhenVisible = () => {
+      if (!document.hidden) void refreshAppearance();
+    };
+    const interval = window.setInterval(refreshWhenVisible, 15_000);
+    window.addEventListener("focus", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+      window.removeEventListener("focus", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [syncAppearance]);
 
   const setLang = (l: Lang) => {
     setLangState(l);
     localStorage.setItem(LANG_KEY, l);
-  };
-  const setTheme = (th: "light" | "dark") => {
-    setThemeState(th);
-    localStorage.setItem(THEME_KEY, th);
   };
 
   useEffect(() => {
@@ -697,7 +724,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = (key: string) => DICT[lang][key] ?? DICT.en[key] ?? key;
 
-  return <Ctx.Provider value={{ lang, setLang, t, theme, setTheme }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ lang, setLang, t, theme }}>{children}</Ctx.Provider>;
 }
 
 export function useI18n() {

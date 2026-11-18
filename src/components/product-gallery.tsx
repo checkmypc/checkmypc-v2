@@ -234,7 +234,7 @@ export function ProductGallery({ product }: { product: Product }) {
               <>
                 <button
                   type="button"
-                  className="absolute start-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:start-3"
+                  className="absolute start-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-fg/10 text-fg hover:bg-fg/20 sm:start-3"
                   aria-label="Previous photo"
                   onClick={() => move(-1)}
                 >
@@ -242,7 +242,7 @@ export function ProductGallery({ product }: { product: Product }) {
                 </button>
                 <button
                   type="button"
-                  className="absolute end-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:end-3"
+                  className="absolute end-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-fg/10 text-fg hover:bg-fg/20 sm:end-3"
                   aria-label="Next photo"
                   onClick={() => move(1)}
                 >

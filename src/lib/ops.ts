@@ -80,6 +80,7 @@ const defaultSettings = (): OpsSettings => ({
   phone: "",
   hours: CONTACT.hours,
   whatsapp: "",
+  appearance: "dark",
   instagram: CONTACT.instagram,
   tiktok: CONTACT.tiktok,
   facebook: CONTACT.facebook,
@@ -115,6 +116,7 @@ export type OpsState = OpsSnapshot & {
   hydrated: boolean;
   unlocked: boolean;
   adminEmail: string | null;
+  syncAppearance: (appearance: "dark" | "light") => void;
   hydrate: () => Promise<void>;
   persist: () => void;
   log: (text: string) => void;
@@ -187,6 +189,11 @@ export const useOps = create<OpsState>((set, get) => {
     hydrated: false,
     unlocked: false,
     adminEmail: null,
+    syncAppearance: (appearance) => {
+      if (get().settings.appearance !== appearance) {
+        set((state) => ({ settings: { ...state.settings, appearance } }));
+      }
+    },
     hydrate: () => {
       if (typeof window === "undefined") return Promise.resolve();
       if (hydratePromise) return hydratePromise;

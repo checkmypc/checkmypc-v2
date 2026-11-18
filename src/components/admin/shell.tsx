@@ -21,7 +21,6 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "@/lib/i18n";
 import { useOps } from "@/lib/ops";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +87,8 @@ function AdminFrame() {
   const openCount = useOps(
     (s) => s.bookings.filter((b) => b.status !== "done" && b.status !== "cancelled").length,
   );
-  const { theme, setTheme } = useI18n();
+  const theme = useOps((s) => s.settings.appearance);
+  const patchSettings = useOps((s) => s.patchSettings);
   const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
   const [query, setQuery] = useState("");
@@ -271,7 +271,7 @@ function AdminFrame() {
           <button
             type="button"
             className="grid size-10 shrink-0 place-items-center rounded-xl text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={() => patchSettings({ appearance: theme === "dark" ? "light" : "dark" })}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             title={theme === "dark" ? "Light mode" : "Dark mode"}
           >

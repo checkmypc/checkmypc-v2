@@ -159,7 +159,7 @@ export function AccessoryGallery({
               <>
                 <button
                   type="button"
-                  className="absolute start-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:start-3"
+                  className="absolute start-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-fg/10 text-fg hover:bg-fg/20 sm:start-3"
                   aria-label="Previous photo"
                   onClick={() => move(-1)}
                 >
@@ -167,7 +167,7 @@ export function AccessoryGallery({
                 </button>
                 <button
                   type="button"
-                  className="absolute end-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 hover:bg-white/20 sm:end-3"
+                  className="absolute end-0 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-fg/10 text-fg hover:bg-fg/20 sm:end-3"
                   aria-label="Next photo"
                   onClick={() => move(1)}
                 >
@@ -189,8 +189,8 @@ export function AccessoryGallery({
                 <button
                   key={`${photo}-${photoIndex}`}
                   type="button"
-                  className={`size-14 shrink-0 overflow-hidden rounded-lg border-2 bg-white/10 p-1 ${
-                    photoIndex === activeIndex ? "border-primary" : "border-white/20"
+                  className={`size-14 shrink-0 overflow-hidden rounded-lg border-2 bg-surface p-1 ${
+                    photoIndex === activeIndex ? "border-primary" : "border-border"
                   }`}
                   aria-label={`View photo ${photoIndex + 1}`}
                   aria-pressed={photoIndex === activeIndex}

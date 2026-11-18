@@ -187,7 +187,7 @@ function InspectionPage() {
                     className={`inspection-offer-cta ${
                       selectedPackage === pkg.id
                         ? "border-[#007BFF] bg-[#007BFF] text-white hover:border-[#007BFF] hover:bg-[#007BFF]"
-                        : "border-gray-300 bg-white text-[#1d1d1f] hover:border-gray-400 hover:bg-white"
+                        : "border-border bg-surface text-fg hover:border-primary/60 hover:bg-surface-2"
                     }`}
                     variant="outline"
                     aria-pressed={selectedPackage === pkg.id}

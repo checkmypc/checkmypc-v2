@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { changeAdminPasswordFn, createOperatorFn, listOperatorsFn } from "@/lib/api";
 import { useOps } from "@/lib/ops";
+import { cn } from "@/lib/utils";
 
 type Operator = { id: string; email: string; name: string; role: string; createdAt: string };
 
@@ -103,6 +104,29 @@ function AdminSettings() {
           Contact details and catalogue backups are stored in the database. Signed in as {adminEmail ?? "operator"}.
         </p>
       </div>
+
+      <Card className="rounded-2xl p-5">
+        <h2 className="font-display font-semibold">Appearance</h2>
+        <p className="mt-1 text-sm text-muted">Choose the appearance shown to every visitor.</p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2" role="group" aria-label="Public website appearance">
+          {(["dark", "light"] as const).map((appearance) => (
+            <button
+              key={appearance}
+              type="button"
+              aria-pressed={settings.appearance === appearance}
+              onClick={() => patch({ appearance })}
+              className={cn(
+                "rounded-xl border px-4 py-3 text-start transition-colors",
+                settings.appearance === appearance
+                  ? "border-primary bg-primary/10 text-fg"
+                  : "border-border bg-bg text-muted hover:bg-surface-2 hover:text-fg",
+              )}
+            >
+              <span className="block font-medium">{appearance === "dark" ? "Dark Mode" : "Light Mode"}</span>
+            </button>
+          ))}
+        </div>
+      </Card>
 
       <Card className="rounded-2xl p-5">
         <h2 className="font-display font-semibold">Contact</h2>

@@ -6,7 +6,8 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { DataBanner } from "@/components/data-banner";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { I18nProvider } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
+import { getPublicAppearance } from "@/lib/api";
 import { useBuild } from "@/lib/store";
 import { useOps } from "@/lib/ops";
 import appCss from "../styles.css?url";
@@ -52,7 +53,8 @@ function AppChrome() {
 }
 
 export const Route = createRootRoute({
-  head: () => ({
+  loader: () => getPublicAppearance(),
+  head: ({ loaderData }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -62,7 +64,7 @@ export const Route = createRootRoute({
         content:
           "CHECKMYPC.MA — Moroccan PC price comparison, builder, used inspection, assembly and cleaning. Check before you buy.",
       },
-      { name: "theme-color", content: "#000000" },
+      { name: "theme-color", content: loaderData === "dark" ? "#000000" : "#f5f5f7" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg?v=2" },
@@ -81,28 +83,40 @@ export const Route = createRootRoute({
 });
 
 function RootLayout() {
+  const appearance = Route.useLoaderData();
+  const theme = appearance === "light" ? "light" : "dark";
   return (
-    <html lang="en" className="dark antialiased" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${theme === "dark" ? "dark " : ""}antialiased`}
+      data-theme={theme}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("cmp.theme.v1");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}var l=localStorage.getItem("cmp.lang.v1");document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.setAttribute("data-theme",t);if(l==="en"||l==="fr"||l==="ar"){document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";}}catch(e){}})();`,
+            __html: `(function(){try{localStorage.removeItem("cmp.theme.v1");var l=localStorage.getItem("cmp.lang.v1");if(l==="en"||l==="fr"||l==="ar"){document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";}}catch(e){}})();`,
           }}
         />
       </head>
       <body className="min-h-screen bg-bg text-fg">
         <PreviewHostBridge />
         <AuthProvider>
-          <I18nProvider>
+          <I18nProvider initialTheme={theme}>
             <HydrateBuild />
             <HydrateOps />
             <AppChrome />
-            <Toaster theme="system" position="bottom-center" />
+            <AppToaster />
           </I18nProvider>
         </AuthProvider>
         <Scripts />
       </body>
     </html>
   );
+}
+
+function AppToaster() {
+  const { theme } = useI18n();
+  return <Toaster theme={theme} position="bottom-center" />;
 }

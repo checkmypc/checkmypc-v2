@@ -138,11 +138,14 @@ export type ActivityItem = {
   text: string;
 };
 
+export type Appearance = "dark" | "light";
+
 export type OpsSettings = {
   email: string;
   phone: string;
   hours: string;
   whatsapp: string;
+  appearance: Appearance;
   instagram?: string;
   tiktok?: string;
   facebook?: string;

@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { AdminSnapshot, PublicSnapshot, PublicSupplementSnapshot } from "./server/repo";
-import type { Accessory, Booking, OpsSettings, Product, Technician } from "./types";
+import type { Accessory, Appearance, Booking, OpsSettings, Product, Technician } from "./types";
 import type { InspectionReport, UsedListing } from "./used";
 import type { PrebuiltRecipe } from "./prebuilts";
 
@@ -191,6 +191,7 @@ const settingsZ = z.object({
   phone: z.string().max(30),
   hours: z.string().max(120),
   whatsapp: z.string().max(30),
+  appearance: z.enum(["dark", "light"]).default("dark"),
   instagram: z.string().max(200).optional(),
   tiktok: z.string().max(200).optional(),
   facebook: z.string().max(200).optional(),
@@ -222,6 +223,12 @@ export const getPublicSnapshot = createServerFn({ method: "GET" }).handler(
     return loadPublicSnapshot();
   },
 );
+
+export const getPublicAppearance = createServerFn({ method: "GET" }).handler(async (): Promise<Appearance> => {
+  await setNoStoreResponse();
+  const { loadPublicAppearance } = await import("./server/repo");
+  return loadPublicAppearance();
+});
 
 export const getPublicProducts = createServerFn({ method: "GET" }).handler(async () => {
   await setNoStoreResponse();
@@ -591,6 +598,7 @@ export const importOpsFn = createServerFn({ method: "POST" })
           phone: "",
           hours: "",
           whatsapp: "",
+          appearance: "dark",
         },
         team: Array.isArray(snap.team) ? snap.team : [],
         bookings: Array.isArray(snap.bookings) ? snap.bookings : [],

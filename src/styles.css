@@ -4,6 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  color-scheme: light;
   --bg: #f5f5f7;
   --surface: #ffffff;
   --surface-2: #ececf1;
@@ -33,6 +34,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --bg: #000000;
   --surface: #1c1c1e;
   --surface-2: #2c2c2e;
@@ -1401,8 +1403,8 @@
     max(0.75rem, env(safe-area-inset-right))
     max(0.75rem, env(safe-area-inset-bottom))
     max(0.75rem, env(safe-area-inset-left));
-  background: rgb(0 0 0 / 90%);
-  color: #ffffff;
+  background: color-mix(in oklab, var(--bg) 94%, transparent);
+  color: var(--fg);
   backdrop-filter: blur(0.25rem);
 }
 
@@ -1426,15 +1428,15 @@
   height: 3rem;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid rgb(255 255 255 / 24%);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgb(255 255 255 / 14%);
-  color: #ffffff;
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  color: var(--fg);
   transition: background-color 150ms ease;
 }
 
 .product-gallery-zoom-close:hover {
-  background: rgb(255 255 255 / 25%);
+  background: var(--surface-2);
 }
 
 .product-gallery-zoom-stage {

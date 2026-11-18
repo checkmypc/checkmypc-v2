@@ -6,6 +6,7 @@ import type {
   Booking,
   BookingStatus,
   AccessoryCategory,
+  Appearance,
   CategorySlug,
   Offer,
   OpsSettings,
@@ -192,6 +193,7 @@ function mapSettings(row: SettingsRow | undefined): OpsSettings {
       phone: "",
       hours: "Mon–Sat 10:00–19:00",
       whatsapp: "",
+      appearance: "dark",
     };
   }
   return {
@@ -199,6 +201,7 @@ function mapSettings(row: SettingsRow | undefined): OpsSettings {
     phone: asString(row.phone),
     hours: asString(row.hours),
     whatsapp: asString(row.whatsapp),
+    appearance: row.appearance === "light" ? "light" : "dark",
     instagram: asString(row.instagram) || undefined,
     tiktok: asString(row.tiktok) || undefined,
     facebook: asString(row.facebook) || undefined,
@@ -239,6 +242,12 @@ export async function loadPublicProducts(): Promise<Product[]> {
 
 export async function loadPublicSupplement(): Promise<PublicSupplementSnapshot> {
   return loadPublicSupplementSnapshot(await sqlClient());
+}
+
+export async function loadPublicAppearance(): Promise<Appearance> {
+  const sql = await sqlClient();
+  const rows = await sql<{ appearance: unknown }>`select appearance from site_settings where id = ${"default"}`;
+  return rows[0]?.appearance === "light" ? "light" : "dark";
 }
 
 export async function loadPublicSnapshot(): Promise<PublicSnapshot> {
@@ -664,11 +673,12 @@ export async function deleteTech(id: string, actor?: string): Promise<void> {
 export async function saveSettings(settings: OpsSettings, actor?: string): Promise<void> {
   const sql = await sqlClient();
   await sql.query(
-    `insert into site_settings (id, email, phone, hours, whatsapp, instagram, tiktok, facebook, updated_at)
-     values ('default', $1,$2,$3,$4,$5,$6,$7, now())
+    `insert into site_settings (id, email, phone, hours, whatsapp, instagram, tiktok, facebook, appearance, updated_at)
+     values ('default', $1,$2,$3,$4,$5,$6,$7,$8, now())
      on conflict (id) do update set
        email = excluded.email, phone = excluded.phone, hours = excluded.hours, whatsapp = excluded.whatsapp,
-       instagram = excluded.instagram, tiktok = excluded.tiktok, facebook = excluded.facebook, updated_at = now()`,
+       instagram = excluded.instagram, tiktok = excluded.tiktok, facebook = excluded.facebook,
+       appearance = excluded.appearance, updated_at = now()`,
     [
       settings.email,
       settings.phone,
@@ -677,6 +687,7 @@ export async function saveSettings(settings: OpsSettings, actor?: string): Promi
       settings.instagram ?? "",
       settings.tiktok ?? "",
       settings.facebook ?? "",
+      settings.appearance ?? "dark",
     ],
   );
   if (actor) await logActivity(sql, "Settings saved", actor);
